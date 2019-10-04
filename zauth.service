@@ -1,0 +1,33 @@
+# zauth: User authentication and management server with LDAP support 
+#
+# To enable via SystemD (if this file is in /srv/zauth/)
+#   Update the WorkingDirectory, ExecStart, User, and Group variables below.                                                                
+#   $ sudo cp zauth.service /etc/systemd/system/ # Avoid mount point limitation
+#   $ sudo systemctl enable zauth.service
+#   $ sudo systemctl daemon-reload               
+#   $ sudo systemctl start zauth.service
+#   $ sudo systemctl status zauth.service
+# 
+
+[Unit]
+Description=zauth
+After=syslog.target
+After=network.target
+After=mysql.service
+
+[Service]
+RestartSec=2s
+Type=simple
+User=zauth
+Group=ubuntu
+WorkingDirectory=/srv/zauth/
+ExecStart=/srv/zauth/zauth
+Restart=always
+Environment=USER=zauth HOME=/home/zauth
+# Track and show CPU and RAM usage
+CPUAccounting=yes
+MemoryAccounting=yes
+
+[Install]
+WantedBy=multi-user.target
+
