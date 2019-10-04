@@ -3,10 +3,7 @@ package httpserver
 import (
 	"net/http"
 
-	"strings"
-
 	"github.com/ansel1/merry"
-	"github.com/gorilla/mux"
 
 	mUser "github.com/joshsziegler/zauth/models/user"
 )
@@ -23,8 +20,7 @@ type userDetailData struct {
 // UserDetailGet is a sub-handler that shows the details for a specific user.
 func UserDetailGet(c *zauthContext, w http.ResponseWriter, r *http.Request) error {
 	// Get the requested username from the URL
-	vars := mux.Vars(r)
-	requestedUsername := strings.Trim(vars["username"], " ")
+	requestedUsername := c.GetRouteVarTrim("username")
 	// Check permissions
 	if !c.User.CanEditUser(requestedUsername) {
 		return ErrPermissionDenied.Here()

@@ -4,11 +4,8 @@ import (
 	"fmt"
 	"net/http"
 
-	"strings"
-
 	"github.com/ansel1/merry"
 	"github.com/gorilla/csrf"
-	"github.com/gorilla/mux"
 
 	"github.com/joshsziegler/zauth/models/password"
 	"github.com/joshsziegler/zauth/models/user"
@@ -34,8 +31,7 @@ func PasswordResetGetPost(c *zauthContext, w http.ResponseWriter, r *http.Reques
 		return nil
 	}
 	// Get the token from the URL
-	vars := mux.Vars(r)
-	token := strings.Trim(vars["token"], " ")
+	token := c.GetRouteVarTrim("token")
 	// Validate the password reset token
 	requestedUsername, err := user.ValidatePasswordResetToken(token)
 	if err != nil {

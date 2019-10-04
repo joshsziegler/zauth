@@ -3,11 +3,9 @@ package httpserver
 import (
 	"html/template"
 	"net/http"
-	"strings"
 
 	"github.com/ansel1/merry"
 	"github.com/gorilla/csrf"
-	"github.com/gorilla/mux"
 	"github.com/joshsziegler/zauth/models/password"
 	"github.com/joshsziegler/zauth/models/user"
 	mUser "github.com/joshsziegler/zauth/models/user"
@@ -28,8 +26,7 @@ type userSetPasswordPageData struct {
 // userSetPassword is a sub-handler that handles password changes
 func userSetPassword(c *zauthContext, w http.ResponseWriter, r *http.Request) error {
 	// Get the requested username from the URL
-	vars := mux.Vars(r)
-	requestedUsername := strings.Trim(vars["username"], " ")
+	requestedUsername := c.GetRouteVarTrim("username")
 	// Check permissions
 	if !c.User.CanEditUser(requestedUsername) {
 		return ErrPermissionDenied.Here()

@@ -43,6 +43,7 @@ type zauthContext struct {
 	User               *user.User
 	NormalFlashMessage string
 	ErrorFlashMessage  string
+	RouteVariables     map[string]string
 }
 
 // GetUser returns the specified User. This potentially avoids a second DB call
@@ -53,6 +54,11 @@ func (c *zauthContext) GetUser(username string) (user.User, error) {
 		return *c.User, nil
 	}
 	return user.GetUserWithGroups(DB, username)
+}
+
+// GetRouteVarTrim returns the whitespace trimmed Gorilla Mux Route Variable.
+func (c *zauthContext) GetRouteVarTrim(varName string) string {
+	return strings.Trim(c.RouteVariables[varName], " ")
 }
 
 // zauthHandler adds a context argument and is used with handleWrap
@@ -74,7 +80,10 @@ type zauthHandler = func(c *zauthContext, w http.ResponseWriter, r *http.Request
 func wrapHandler(router *mux.Router, subHandler zauthHandler, requireLogin bool) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		// Create the context that we pass to the subHandler
-		c := zauthContext{Router: router}
+		c := zauthContext{
+			Router:         router,
+			RouteVariables: mux.Vars(r),
+		}
 		var err error
 		// Get username of user (or nil if they are not logged in)
 		username := getUsername(w, r)
