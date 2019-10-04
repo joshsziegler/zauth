@@ -49,7 +49,7 @@ type zauthContext struct {
 // if the HTTP request is being made by this user, and is thus already loaded
 // into memory.
 func (c *zauthContext) GetUser(username string) (user.User, error) {
-	if c.User.Username == username {
+	if c.User != nil && c.User.Username == username {
 		return *c.User, nil
 	}
 	return user.GetUserWithGroups(DB, username)
