@@ -1,0 +1,30 @@
+{{template "header.html" .User }}
+
+<section>
+    <h4>All Users</h4>
+    <table class="u-full-width">
+        <thead>
+            <tr>
+                <th></th>
+                <th>Username</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{ range .Users }}
+                <tr>
+                     <td>{{ if .Disabled -}}
+                        <span class="oi" data-glyph="lock-locked"></span>
+                        {{- end -}}
+                     </td>
+                     <td><a href="/users/{{ .Username  }}">{{ .Username | html }}</a></td>
+                     <td>{{ .FirstName | html }}</td>
+                     <td>{{ .LastName | html }}</td>
+                </tr>
+            {{ end }}
+        </tbody>
+    </table>
+</section>
+
+{{template "footer.html"}}

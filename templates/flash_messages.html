@@ -1,0 +1,9 @@
+
+{{ if ne .Message "" }}
+    <p class="alert">{{ .Message }}</p>
+{{ end }}
+{{ if ne .Error "" }}
+    <p class="alert error">
+        <strong>Error:</strong> {{ .Error }}
+    </p>
+{{ end }}

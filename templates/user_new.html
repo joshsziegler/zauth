@@ -1,0 +1,34 @@
+{{template "header.html" .User }}
+<section>
+    <form method="post" class="">
+        <h4>New User</h4>
+        {{ if ne .ErrorMessage "" }}
+            <p class="alert error">
+                <strong>Error:</strong> {{ .ErrorMessage }}
+            </p>
+        {{ end }}
+        <div>
+            <label for="FirstNameInput">First Name
+            </label>
+            <input id="FirstNameInput" name="FirstName" type="text" 
+                value="{{.Form.FirstName}}" class="u-full-width" required>
+        </div>
+        <div>
+            <label for="LastNameInput">Last Name
+            </label>
+            <input id="LastNameInput" name="LastName" type="text" 
+                value="{{.Form.LastName}}" class="u-full-width" required>
+        </div>
+        <div>
+            <label for="Emailinput">Email
+                <span style="color: #999; margin-left: 2rem;">Must be a valid email.</span>
+            </label>
+            <input id="EmailInput" name="Email" type="text" 
+                value="{{.Form.Email}}" class="u-full-width" required>
+        </div>
+        {{ .CSRFField }}
+        <input class="button-primary u-full-width" type="submit" value="Create">
+    </form>
+</section>
+
+{{template "footer.html"}}

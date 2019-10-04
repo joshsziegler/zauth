@@ -1,0 +1,103 @@
+html {
+    /* Make the page background slightly gray, so the body stands out more */
+    background: #efefef;
+}
+body {
+    background-color: #fff;
+    color: #555555;
+    max-width: 50rem;
+    /* Center the child, but add some space at the bottom for scrolling */
+    margin: 0 auto 5rem;
+    /* Make the body appear to be on top of the background */
+    box-shadow: 0 0 3px 1px rgba(0,0,0,0.15);
+}
+/* Style the top navigation bar */
+nav {
+	margin: 0 0 2rem 0;
+    padding: 1rem 2rem;
+    background: #2d2d2d;
+	font-size: 1.6rem;
+    font-weight: bold;
+    box-shadow: 0 4px  5px  0   rgba(0,0,0,.14), 
+                0 1px 10px  0   rgba(0,0,0,.12), 
+                0 2px  4px -1px rgba(0,0,0,.2);
+}
+nav a {
+	text-decoration: none;
+    color: #f7f7f7; 
+}
+nav a:not(:last-child){
+    margin-right: 2.5rem;
+}
+/* Sections are white boxes with rounded corners showing a logic group */
+section {
+    padding: 2rem 3rem;
+    overflow: auto;
+}
+
+/*** Headers ***/
+h4 {
+    border-bottom: 1px solid black;
+}
+/*** Tables ***/
+table {
+    border-collapse: collapse;
+}
+th, td {
+    vertical-align: top;
+}
+
+/* Darken background of read-only inputs */
+input[readonly] {
+    background: rgba(68, 68, 68, 0.1);
+}
+li {
+	margin: 0;
+}
+/* Margin Top - 1.0Rem */
+.mt-10r { 
+	margin-top: 1rem;
+}
+/* Margin Left - 0.5Rem */
+.ml-05r { 
+	margin-left: 0.5rem;
+}
+/* Show a simple message using italic text and blue left-hand border */
+p.alert {
+    /* Make left-border blue to make it stand out */
+    border-left: 4px solid #33c3f0;
+    /* Transparent version of the left-border color */
+    background-color: #33c3f01f;
+    padding: 1rem;
+    font-style: italic;
+}
+/* Show a simple error using italic text and red left-hand border */
+p.alert.error {
+    /* Make left-border red to make it stand out */
+    border-left: 4px solid #ff4f2e;
+    /* Transparent version of the left-border color */
+    background-color: #ff4f2e1f;
+}
+span.oi.red {
+    color: #ff4f2e;
+}
+span.oi.green {
+    color: #568203;
+}
+/* Show a small question mark denoting that information is available if the user
+ * hovers or clicks on this element 
+ *
+ * Example:
+ *   <span class="oi help-icon" data-glyph="question-mark" aria-hidden="true" 
+ *         title="Help?"></span>
+ */
+span.oi.help-icon[data-glyph="question-mark"] {
+    text-align: center;
+    display: inline-block;
+    font-weight: bold;
+    font-size: 11px;
+    border-radius: 15px; /* Make this appear to have a round background of a slight grey; based on 13px surrounding font */
+    padding: 2px;
+    background: #eee;
+    cursor: pointer; /* Make it clear that this is actionable (click to show info */
+}

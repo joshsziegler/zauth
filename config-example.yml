@@ -1,0 +1,14 @@
+production: false
+sendgridapikey: YOUR-KEY-HERE
+database:
+  username: YourUsername 
+  password: YourPassword!
+  address: localhost
+  dbname: zauth
+ldap:
+  basedn: dc=example,dc=com
+  userou: ou=People,
+  groupou: ou=Group,
+  listento: localhost:3389
+http:
+  listento: localhost:8888

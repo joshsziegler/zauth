@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en-us">
+	<head>
+	    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	    {{/* We don't want to use a favicon, but the browser will request one 
+	         anyway if we don't give one. This should prevent that issue. See:
+	     stackoverflow.com/questions/1321878/how-to-prevent-favicon-ico-requests
+	    */}}
+	    <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+	    <title>zauth</title>
+	    {{/*  CSS */}}
+	    <link rel="stylesheet" media="all" href="/static/css/normalize.min.css">
+	    <link rel="stylesheet" media="all" href="/static/css/skeleton.min.css">
+        {{/* Open Iconic's icons (Open Iconic — www.useiconic.com/open)
+             We are using the font version of these icons, so to use one:
+             <span class="oi" data-glyph="icon-name" title="icon-name" aria-hidden="true"></span>
+             Styling will work just like a normal font (so color: #fff will change the icon to white).
+        */}}
+        <link rel="stylesheet" media="all" href="/static/css/open-iconic.min.css" >
+	    <link rel="stylesheet" media="all" href="/static/css/custom.css">
+	    {{/* JavaScript that MUST be loaded in the header. 
+             For performance, you should load JS at the end of the body instead.  
+         */}}
+	</head>
+	<body>
+        {{/* Pass in a User struct as an argument to this template */}}
+        <header>
+            <nav>
+                {{ if . }} 
+                    <a href="/users/{{ .Username }}">Me</a>
+                    {{ if .IsAdmin }}
+                        <a href="/users" class="">Users</a>
+                        <a href="/user/new">New User</a>
+                         {{/* TODO: <a href="/groups" class="">Groups</a> */}}
+                    {{ end }} 
+                   
+                    <a href="/logout" class="u-pull-right">Logout</a>
+                {{ else }}
+                    &nbsp; {{/* Prevent this from shrinking due to no text. */}}
+                {{ end }} 
+            </nav>
+        </header>

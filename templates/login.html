@@ -1,0 +1,22 @@
+{{template "header.html"}}
+
+<section class="mt-10r">
+    <form action="/login" method="post">
+        <h4>Login</h4>
+        {{ if ne .Message "" }}
+            <p class="alert" role="alert">{{ .Message }}</p>
+        {{ end }}
+        {{ if ne .Error "" }}
+            <p class="alert error" role="alert">{{ .Error }}</p>
+        {{ end }}
+        <label for="name" class="">Username</label>
+        <input name="username" type="text" class="u-full-width" autofocus
+            placeholder="jane.doe" value="{{ .Username }}" required >
+        <label for="password" class="">Password</label>
+        <input name="password" type="password" class="u-full-width" required>
+        {{ .CSRFField }}
+        <button type="submit" class="button-primary">Login</button>
+    </form>
+</section>
+
+{{template "footer.html"}}
