@@ -168,3 +168,42 @@ func GetUsersWithoutGroups(tx *sqlx.Tx) (users map[int64]*(User), err error) {
 	}
 	return users, nil
 }
+
+// GetGroupsNotMemberOf returns a slice of all Group names this user is NOT a
+// member of.
+func (u *User) GetGroupsNotMemberOf(tx *sqlx.Tx) (groups []string, err error) {
+	groups = make([]string, 0)
+	var rows *sqlx.Rows
+	// If they aren't in any groups, the other query will fail
+	if len(u.Groups) < 1 {
+		rows, err = tx.Queryx(`SELECT Name
+								FROM Groups
+								ORDER BY Name ASC;`)
+
+	} else {
+		// Create a query with an arbitrary number of params using sqlx.In()
+		query, qArgs, err := sqlx.In(`SELECT Name 
+									  FROM Groups
+									  WHERE Name NOT IN(?)
+									  ORDER BY Name ASC;`, u.Groups)
+		if err != nil {
+			return groups, merry.Wrap(err)
+		}
+		// Run the actual query
+		rows, err = tx.Queryx(query, qArgs...)
+		if err != nil {
+			return groups, merry.Wrap(err)
+		}
+	}
+	defer rows.Close()
+	// Parse each Group name
+	var groupName string
+	for rows.Next() {
+		err = rows.Scan(&groupName)
+		if err != nil {
+			return groups, merry.Wrap(err)
+		}
+		groups = append(groups, groupName)
+	}
+	return groups, nil
+}
