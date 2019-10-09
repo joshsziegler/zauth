@@ -54,6 +54,8 @@ var templateHelpers = template.FuncMap{
 
 // get the username from the secure session. If it doesn't exist, redirect to
 // the login page.
+//
+// Does NOT use the database!
 func getUsername(w http.ResponseWriter, r *http.Request) *string {
 	// Always returns a session, even if it's empty
 	session, err := store.Get(r, sessionName)

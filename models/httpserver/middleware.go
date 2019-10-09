@@ -6,6 +6,7 @@ import (
 
 	"github.com/ansel1/merry"
 	"github.com/gorilla/mux"
+	"github.com/jmoiron/sqlx"
 
 	"github.com/joshsziegler/zauth/models/user"
 )
@@ -39,6 +40,8 @@ type zauthContext struct {
 	// Router is the Gorilla-based router. It's included here so we can route
 	// names can be reversed (e.g. what is the URI for a user's details page?).
 	Router *mux.Router
+	// Tx is the database transaction that is started for you.
+	Tx *sqlx.Tx
 	// User is the person making this HTTP request.
 	User               *user.User
 	NormalFlashMessage string
@@ -53,7 +56,7 @@ func (c *zauthContext) GetUser(username string) (user.User, error) {
 	if c.User != nil && c.User.Username == username {
 		return *c.User, nil
 	}
-	return user.GetUserWithGroups(DB, username)
+	return user.GetUserWithGroups(c.Tx, username)
 }
 
 // GetRouteVarTrim returns the whitespace trimmed Gorilla Mux Route Variable.
@@ -84,7 +87,12 @@ func wrapHandler(router *mux.Router, subHandler zauthHandler, requireLogin bool)
 			Router:         router,
 			RouteVariables: mux.Vars(r),
 		}
-		var err error
+		// Create a DB transaction for our context struct
+		tx, err := DB.Beginx()
+		if err != nil {
+			Error(w, 500, "Error", "Sorry, but the server encountered an error.", nil)
+		}
+		c.Tx = tx
 		// Get username of user (or nil if they are not logged in)
 		username := getUsername(w, r)
 		// Log this request, including their username if they are logged in
@@ -100,13 +108,15 @@ func wrapHandler(router *mux.Router, subHandler zauthHandler, requireLogin bool)
 				log.Error(err)
 			}
 			http.Redirect(w, r, urlLogin, http.StatusFound)
+			c.Tx.Commit()
 			return
 		}
 		// Get and save user struct if they are logged in
 		if username != nil {
-			tempUser, err := user.GetUserWithGroups(DB, *username)
+			tempUser, err := user.GetUserWithGroups(tx, *username)
 			if err != nil {
 				Error(w, 500, "Error", "Sorry, but the server encountered an error.", nil)
+				c.Tx.Commit()
 				return
 			}
 			// Convert to pointer to allow us to check for an empty User using nil
@@ -125,7 +135,10 @@ func wrapHandler(router *mux.Router, subHandler zauthHandler, requireLogin bool)
 				// We can't guarantee this error has a nice UserMessage
 				Error(w, 500, "Error", merry.Details(err), nil)
 			}
+			// Rollback if the sub-handler failed
+			c.Tx.Rollback()
 			return
 		}
+		c.Tx.Commit()
 	})
 }

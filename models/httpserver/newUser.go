@@ -55,7 +55,7 @@ func NewUserPost(c *zauthContext, w http.ResponseWriter, r *http.Request) error 
 	// Handle the request
 	data := newUserPageData{User: c.User, CSRFField: csrf.TemplateField(r)}
 	form := newFormNewUser(r)
-	newUser, err := mUser.NewUser(DB, form.FirstName, form.LastName, form.Email)
+	newUser, err := mUser.NewUser(c.Tx, form.FirstName, form.LastName, form.Email)
 	if err != nil {
 		data.Form = form // Show current form values along with error
 		data.ErrorMessage = merry.UserMessage(err)

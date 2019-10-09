@@ -18,19 +18,11 @@ func UserListGet(c *zauthContext, w http.ResponseWriter, r *http.Request) error 
 		return ErrPermissionDenied.Here()
 	}
 
-	// Handle the request
-	tx, err := DB.Beginx()
+	users, err := mUser.GetUsersWithoutGroups(c.Tx)
 	if err != nil {
 		return ErrInternal.Here()
 	}
-	defer tx.Commit()
-	users, err := mUser.GetUsersWithoutGroups(tx)
-	if err != nil {
-		return ErrInternal.Here()
-	}
-
 	data := userListData{User: *c.User, Users: users}
 	Render(w, "user_list.html", data)
-
 	return nil
 }

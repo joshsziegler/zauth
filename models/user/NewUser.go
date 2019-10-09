@@ -11,7 +11,7 @@ import (
 
 // NewUser creates a new user (if details are valid), and send them an email so
 // they can set their initial password.
-func NewUser(DB *sqlx.DB, firstName string, lastName string, email string) (user User, err error) {
+func NewUser(tx *sqlx.Tx, firstName string, lastName string, email string) (user User, err error) {
 	// 0. Create temp user object to hold our values pre-Db-insert
 	firstName = strings.Trim(firstName, " ")
 	lastName = strings.Trim(lastName, " ")
@@ -35,7 +35,7 @@ func NewUser(DB *sqlx.DB, firstName string, lastName string, email string) (user
 	username := strings.ToLower(fmt.Sprintf("%s.%s", firstName, lastName))
 
 	// 3. Insert the user into the DB
-	_, err = DB.Exec(`INSERT INTO Users (Username, FirstName, LastName, Email)
+	_, err = tx.Exec(`INSERT INTO Users (Username, FirstName, LastName, Email)
 					  VALUES (?,?,?,?)`, username, firstName, lastName, email)
 	if err != nil {
 		// TODO: Handle duplicate username errors differently? - JZ 2019.08.23
@@ -44,7 +44,7 @@ func NewUser(DB *sqlx.DB, firstName string, lastName string, email string) (user
 	}
 
 	// 4. Get and return the user
-	user, err = GetUserWithGroups(DB, username)
+	user, err = GetUserWithGroups(tx, username)
 	if err != nil {
 		err = merry.Wrap(err).WithUserMessage("Retrieving new user failed.")
 		return
