@@ -49,13 +49,18 @@
             {{ end }}
             <tr>
                 <th>Groups</th>
-                <td colspan="2">
+                <td>
                     <ul>
                         {{ range .RequestedUser.Groups }}
                             <li>{{ . }}</li>
                         {{ else }}
                         {{ end }}
                     </ul>
+                </td>
+                <td>
+                    {{ if .RequestingUser.IsAdmin }}
+                        <a href="/users/{{.RequestedUser.Username}}/groups">Edit</a>
+                    {{ end }}
                 </td>
             </tr>
             {{ if .RequestingUser.IsAdmin }}
