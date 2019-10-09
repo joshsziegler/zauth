@@ -5,6 +5,9 @@ import (
 	"github.com/jmoiron/sqlx"
 )
 
+// TODO: Restrict Group names to alphanumeric, with hypends (no whitespace)
+// TODO: Require group names to be unique
+
 // Group represents and LDAP group's attributes and members
 type Group struct {
 	ID          int64  `db:"ID"`
