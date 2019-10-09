@@ -121,7 +121,7 @@ func UserDisable(username string) (err error) {
 }
 
 // GetUserWithGroups returns a single User struct, including the groups they
-// belong to.
+// belong to (in alphabetical ascending order by name).
 func GetUserWithGroups(DB *sqlx.DB, username string) (user User, err error) {
 	err = DB.QueryRowx(`SELECT * FROM Users WHERE Username=?`,
 		username).StructScan(&user)
@@ -133,7 +133,8 @@ func GetUserWithGroups(DB *sqlx.DB, username string) (user User, err error) {
 							FROM Groups 
 							INNER JOIN User2Group 
 								ON Groups.ID=User2Group.GroupID 
-							WHERE User2Group.UserID=?;`, user.ID)
+							WHERE User2Group.UserID=?
+							ORDER BY Groups.Name ASC;`, user.ID)
 	if err != nil {
 		return User{}, merry.Wrap(err)
 	}

@@ -24,7 +24,7 @@ func GetAll(tx *sqlx.Tx) (users map[int64]*(mUser.User),
 	}
 
 	// Get all Groups (does NOT pull members)
-	groups, err = mGroup.GetGroups(tx)
+	groups, err = mGroup.GetGroupsMap(tx)
 	if err != nil {
 		err = merry.Append(err, "error getting groups")
 		return

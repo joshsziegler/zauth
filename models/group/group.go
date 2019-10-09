@@ -14,11 +14,12 @@ type Group struct {
 	Members     []string
 }
 
-// GetGroups returns a slice of all Groups, sans Members attribute!
+// GetGroupsMap returns a map of all Groups (using their DB ID as key), sans
+// Members attribute.
 //
 // If you need the Members attribute, please consider using user2group.GetAll()
 // as this will likely be more efficient.
-func GetGroups(tx *sqlx.Tx) (groups map[int64]*(Group), err error) {
+func GetGroupsMap(tx *sqlx.Tx) (groups map[int64]*(Group), err error) {
 	groups = make(map[int64]*(Group))
 	rows, err := tx.Queryx("SELECT * FROM Groups")
 	if err != nil {
