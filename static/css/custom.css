@@ -54,6 +54,12 @@ input[readonly] {
 li {
 	margin: 0;
 }
+ul.plain {
+    list-style: none;
+}
+a.plain {
+    text-decoration: none;
+}
 /* Margin Top - 1.0Rem */
 .mt-10r { 
 	margin-top: 1rem;

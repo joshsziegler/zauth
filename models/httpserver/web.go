@@ -107,6 +107,7 @@ func Listen(logger *logging.Logger, database *sqlx.DB, listenTo string,
 	r.Handle("/users/{username}/password", wrapHandler(r, userSetPassword, true)).Methods("GET", "POST")
 	r.Handle("/users/{username}/{isEnabled:(?:enable|disable)}", wrapHandler(r, userSetEnabled, true)).Methods("GET")
 	r.Handle("/users/{username}/groups", wrapHandler(r, userGroupsGet, true)).Methods("GET")
+	r.Handle("/users/{username}/groups/{groupname}/{addOrRemove:(?:add|remove)}", wrapHandler(r, userAddRemoveGroups, true)).Methods("GET")
 	// /groups/{groupname} - If none, show all if admin or redirect to self TODO: implement
 	r.Handle("/reset-password/{token}", wrapHandler(r, PasswordResetGetPost, false)).Methods("GET", "POST")
 

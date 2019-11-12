@@ -207,16 +207,3 @@ func (u *User) GetGroupsNotMemberOf(tx *sqlx.Tx) (groups []string, err error) {
 	}
 	return groups, nil
 }
-
-// TODO: Implement a Membership matrix function with the following SQL:
-// SELECT Groups.Name,
-//        (SELECT
-//            CASE WHEN COUNT(*)=1 THEN
-//                'true'
-//             ELSE
-//                 'false'
-//             END
-//         FROM User2Group
-//         WHERE User2Group.GroupID=Groups.ID
-//             AND User2Group.UserID=61) AS Member
-// FROM Groups;

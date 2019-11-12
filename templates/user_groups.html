@@ -1,5 +1,7 @@
 {{template "header.html" .RequestingUser }}
 
+{{$RequestedUserUsername := .RequestedUser.Username | html}}
+
 <section>
     <h4>User Groups</h4>
     {{ template "flash_messages.html" . }}
@@ -7,25 +9,29 @@
         <tbody>
             <tr>
                 <th>Username</th>
-                <td colspan="2">{{ .RequestedUser.Username | html }}</td>
+                <td>{{ $RequestedUserUsername }}</td>
             </tr>        
-            {{ if .RequestingUser.IsAdmin }}
-                
-            {{ end }}
             <tr>
                 <th>Groups</th>
-                <td colspan="2">
-                    <ul>
-                        {{ range .RequestedUser.Groups }}
-                            <li>{{ . }}</li>
+                <td>
+                    <ul class="plain">
+                        {{ range .GroupMembership }}
+                            <li>
+                                {{- if .Member -}}
+                                    <a href="/users/{{ $RequestedUserUsername }}/groups/{{ .Name }}/remove" class="plain">&#128505</a> 
+                                {{- else -}} 
+                                    <a href="/users/{{ $RequestedUserUsername }}/groups/{{ .Name }}/add" class="plain">&#9744</a>
+                                {{- end }} 
+                                {{ .Name -}}
+                            </li>
                         {{ else }}
+                            No Groups Exist
                         {{ end }}
                     </ul>
                 </td>
-            </tr>
+            </tr> 
         </tbody>
     </table>
-
 </section>
 
 {{template "footer.html"}}
