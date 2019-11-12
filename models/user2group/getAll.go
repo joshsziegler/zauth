@@ -11,20 +11,20 @@ import (
 
 // GetAll Users and Groups, WITH membership info populated.
 //
-// This exists because it *should* be more efficiently for populating group
+// This exists because it *should* be more efficient for populating group
 // membership info IF AND ONLY IF you need all or most of the users and groups.
 func GetAll(tx *sqlx.Tx) (users map[int64]*(mUser.User),
 	groups map[int64]*(mGroup.Group), err error) {
 
 	// Get all Users (does NOT pull group membership)
-	users, err = mUser.GetUsersWithoutGroups(tx)
+	users, err = mUser.GetUsersMapWithoutGroups(tx)
 	if err != nil {
 		err = merry.Append(err, "error getting users")
 		return
 	}
 
 	// Get all Groups (does NOT pull members)
-	groups, err = mGroup.GetGroupsMap(tx)
+	groups, err = mGroup.GetGroupsMapWithoutUsers(tx)
 	if err != nil {
 		err = merry.Append(err, "error getting groups")
 		return

@@ -18,7 +18,7 @@ func UserListGet(c *zauthContext, w http.ResponseWriter, r *http.Request) error 
 		return ErrPermissionDenied.Here()
 	}
 
-	users, err := mUser.GetUsersWithoutGroups(c.Tx)
+	users, err := mUser.GetUsersMapWithoutGroups(c.Tx)
 	if err != nil {
 		return ErrInternal.Here()
 	}

@@ -150,7 +150,7 @@ func GetUserWithGroups(tx *sqlx.Tx, username string) (user User, err error) {
 }
 
 // GetUsersWithoutGroups returns a map of users, stored by their database ID.
-func GetUsersWithoutGroups(tx *sqlx.Tx) (users map[int64]*(User), err error) {
+func GetUsersMapWithoutGroups(tx *sqlx.Tx) (users map[int64]*(User), err error) {
 	users = make(map[int64]*(User))
 	rows, err := tx.Queryx(`SELECT * FROM Users`)
 	if err != nil {
