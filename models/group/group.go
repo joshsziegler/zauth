@@ -5,7 +5,7 @@ import (
 	"github.com/jmoiron/sqlx"
 )
 
-// TODO: Restrict Group names to alphanumeric, with hypends (no whitespace)
+// TODO: Restrict Group names to alphanumeric, with hyphens (no whitespace)
 // TODO: Require group names to be unique
 
 // Group represents and LDAP group's attributes and members
