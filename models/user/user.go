@@ -15,7 +15,7 @@ const (
 	// MySQLZeroDate is a workaround for MySQL not supporting Go's Zero-value
 	// for Dates (0000-00-00 00:00:00). So instead, we have to set each MySQL
 	// date column to also have a default of this.
-	MysqlZeroDate = `0001-01-01 00:00:00`
+	MySQLZeroDate = `0001-01-01 00:00:00`
 )
 
 var (
@@ -108,7 +108,7 @@ func userSetEnable(isEnabled bool, username string) error {
 		 			  SET Disabled=?
 		 			  WHERE Username=?`, !isEnabled, username)
 	if err != nil {
-		merry.Wrap(err)
+		return merry.Wrap(err)
 	}
 	return nil
 }
