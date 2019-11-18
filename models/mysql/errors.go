@@ -4,10 +4,10 @@ package mysql
 // See https://dev.mysql.com/doc/refman/8.0/en/server-error-reference.html for
 // more information.
 const (
-	// Indicates a 'unique' constraint violation (during an insert)
+	// ErrDuplicateEntry indicates a 'unique' constraint violation on insert.
 	// Message: Duplicate entry '%s' for key %d
-	errDuplicateEntry = 1062
-	// Indicates the query returned no rows.
+	ErrDuplicateEntry = 1062
+	// ErrNoResults indicates the MySQL query returned no rows.
 	// Message: Query was empty
-	errResultSetEmpty = 1065
+	ErrNoResults = 1065
 )
