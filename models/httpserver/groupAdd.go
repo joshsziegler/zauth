@@ -63,11 +63,7 @@ func NewGroupPost(c *zauthContext, w http.ResponseWriter, r *http.Request) error
 
 	// New group created successfully, redirect them to the list page?
 	msg := fmt.Sprintf("Group %s successfully created.", form.Name)
-	// Show a flash message, but ignore any error this might return
-	err = addNormalFlashMessage(w, r, msg)
-	if err != nil {
-		// TODO: Handle error...
-	}
+	addNormalFlashMessage(w, r, msg)
 	http.Redirect(w, r, "/groups", 302)
 	return nil
 }

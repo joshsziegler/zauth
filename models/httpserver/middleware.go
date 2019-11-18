@@ -103,12 +103,9 @@ func wrapHandler(router *mux.Router, subHandler zauthHandler, requireLogin bool)
 		}
 		// Redirect if this page requires authentication
 		if requireLogin && username == nil { // Not logged in
-			err = addNormalFlashMessage(w, r, "Sorry, but that page requires "+
-				"you to login first. If you were previously logged in, your "+
-				"session has expired.")
-			if err != nil {
-				log.Error(err)
-			}
+			addNormalFlashMessage(w, r, "Sorry, but that page requires you to "+
+				"login first. If you were previously logged in, your session "+
+				"has expired.")
 			http.Redirect(w, r, urlLogin, http.StatusFound)
 			err = c.Tx.Commit()
 			if err != nil {

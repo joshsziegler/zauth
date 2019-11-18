@@ -11,13 +11,8 @@ const (
 	flashMessageSessionName = `zauth-flashes`
 	errorFlashKey           = `error-flash`
 	normalFlashKey          = `message-flash`
-)
-
-var (
-	// ErrGettingFlashMessages denotes an error when retrieving flash storage.
-	ErrGettingFlashMessages = merry.
-		New("error getting flash messages").
-		WithUserMessage("Failed to retrieve flash messages.")
+	errGetFlashMessages     = "error getting flash messages"
+	errAddFlashMessage      = "error while adding a normal flash message"
 )
 
 // getFlashMessages returns a single error flash message and a single normal
@@ -51,25 +46,24 @@ func getFlashMessages(w http.ResponseWriter, r *http.Request) (messageFlash stri
 	return
 }
 
-// addNormalFlashMessage adds an message to the flash messages store to be
-// viewed by the user upon next page request.
+// addNormalFlashMessage adds a message to the flash messages store to be viewed
+// by the user upon next page request.
 //
 // If you need to add a flash message, you should do so before writing to the
 // response(Writer)! This is due to gorilla's session.Save().
 //
 // Normal flash messages are not errors, and are typically informing the user
 // that an operation was successful such as logging out, or creating a new user.
-func addNormalFlashMessage(w http.ResponseWriter, r *http.Request, message string) error {
+func addNormalFlashMessage(w http.ResponseWriter, r *http.Request, message string) {
 	session, err := store.Get(r, flashMessageSessionName)
 	if err != nil {
-		return ErrGettingFlashMessages.Here()
+		log.Error(merry.Prepend(err, errGetFlashMessages))
 	}
 	session.AddFlash(message, normalFlashKey)
 	err = session.Save(r, w)
 	if err != nil {
-		log.Error(err)
+		log.Error(merry.Prepend(err, errAddFlashMessage))
 	}
-	return nil
 }
 
 // addErrorFlashMessage adds an error message to the flash messages store to be
@@ -77,15 +71,14 @@ func addNormalFlashMessage(w http.ResponseWriter, r *http.Request, message strin
 //
 // If you need to add a flash message, you should do so before writing to the
 // response(Writer)! This is due to gorilla's session.Save().
-func addErrorFlashMessage(w http.ResponseWriter, r *http.Request, message string) error {
+func addErrorFlashMessage(w http.ResponseWriter, r *http.Request, message string) {
 	session, err := store.Get(r, flashMessageSessionName)
 	if err != nil {
-		return ErrGettingFlashMessages.Here()
+		log.Error(merry.Prepend(err, errGetFlashMessages))
 	}
 	session.AddFlash(message, errorFlashKey)
 	err = session.Save(r, w)
 	if err != nil {
-		log.Error(err)
+		log.Error(merry.Prepend(err, errAddFlashMessage))
 	}
-	return nil
 }

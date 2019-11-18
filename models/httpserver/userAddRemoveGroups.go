@@ -39,10 +39,7 @@ func userAddRemoveGroups(c *zauthContext, w http.ResponseWriter, r *http.Request
 		addErrorFlashMessage(w, r, flash+"failed.")
 		return err
 	}
-	err = addNormalFlashMessage(w, r, flash+"succeeded.")
-	if err != nil {
-		return err
-	}
+	addNormalFlashMessage(w, r, flash+"succeeded.")
 	// Redirect them to the requested user's details page
 	http.Redirect(w, r, "/users/"+requestedUsername, http.StatusFound)
 	return nil

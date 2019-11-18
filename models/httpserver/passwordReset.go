@@ -22,11 +22,8 @@ import (
 func PasswordResetGetPost(c *zauthContext, w http.ResponseWriter, r *http.Request) error {
 	// Only allow anonymous users to use password reset links
 	if c.User != nil {
-		err := addErrorFlashMessage(w, r,
+		addErrorFlashMessage(w, r,
 			"You cannot use a password reset link because you are already logged in.")
-		if err != nil {
-			return err
-		}
 		http.Redirect(w, r, fmt.Sprintf("/users/%s", c.User.Username), 302)
 		return nil
 	}
@@ -37,11 +34,7 @@ func PasswordResetGetPost(c *zauthContext, w http.ResponseWriter, r *http.Reques
 	if err != nil {
 		// Invalid token - Set flash message and redirect to our login page
 		log.Errorf("invalid password reset token: %s", err)
-		err = addErrorFlashMessage(w, r,
-			"Invalid or expired password reset token.")
-		if err != nil {
-			return err
-		}
+		addErrorFlashMessage(w, r, "Invalid or expired password reset token.")
 		http.Redirect(w, r, urlLogin, 302)
 		return nil
 	}
@@ -76,11 +69,8 @@ func PasswordResetGetPost(c *zauthContext, w http.ResponseWriter, r *http.Reques
 			return nil
 		}
 
-		err = addNormalFlashMessage(w, r,
+		addNormalFlashMessage(w, r,
 			"Password successfully changed. Please login.")
-		if err != nil {
-			return err
-		}
 		log.Infof("changed password for %s", requestedUsername)
 		http.Redirect(w, r, urlLogin, 302)
 		return nil

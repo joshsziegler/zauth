@@ -18,10 +18,7 @@ func LogoutGet(c *zauthContext, w http.ResponseWriter, r *http.Request) error {
 	if err != nil {
 		return ErrInternal.Here()
 	}
-	err = addNormalFlashMessage(w, r, "Successfully logged out.")
-	if err != nil {
-		return err
-	}
+	addNormalFlashMessage(w, r, "Successfully logged out.")
 	http.Redirect(w, r, urlLogin, http.StatusFound) // StatusFound ~ 302
 	return nil
 }

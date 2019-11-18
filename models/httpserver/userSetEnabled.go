@@ -30,10 +30,9 @@ func userSetEnabled(c *zauthContext, w http.ResponseWriter, r *http.Request) (er
 	// Set flash message indicating result
 	if err != nil {
 		addErrorFlashMessage(w, r, fmt.Sprintf("Failed to %s user.", operation))
-	}
-	err = addNormalFlashMessage(w, r, fmt.Sprintf("User successfully %sd.", operation))
-	if err != nil {
-		return err
+	} else {
+		addNormalFlashMessage(w, r, fmt.Sprintf("User successfully %sd.",
+			operation))
 	}
 	// Redirect them to the requested user's details page
 	http.Redirect(w, r, "/users/"+requestedUsername, http.StatusFound)
