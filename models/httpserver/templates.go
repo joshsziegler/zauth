@@ -17,23 +17,18 @@ func MustLoadBoxedTemplates(b packr.Box) *template.Template {
 			return nil
 		}
 		var err error
-		var csz int64
 		finfo, err := f.FileInfo()
 		if err != nil {
 			return err
 		}
-
 		// skip directory path
 		if finfo.IsDir() {
 			return nil
 		}
-		csz = finfo.Size()
-
 		// skip all files except .html
 		if !strings.HasSuffix(p, ".html") {
 			return nil
 		}
-
 		// Normalize template name
 		n := p
 		if strings.HasPrefix(p, "\\") || strings.HasPrefix(p, "/") {
@@ -41,14 +36,11 @@ func MustLoadBoxedTemplates(b packr.Box) *template.Template {
 		}
 		// replace windows path seperator \ to normalized /
 		n = strings.Replace(n, "\\", "/", -1)
-
-		var h = make([]byte, 0, csz)
-
-		if h, err = b.MustBytes(p); err != nil {
+		var h string
+		if h, err = b.FindString(p); err != nil {
 			return err
 		}
-
-		if _, err = t.New(n).Parse(string(h)); err != nil {
+		if _, err = t.New(n).Parse(h); err != nil {
 			return err
 		}
 		return nil
