@@ -11,29 +11,6 @@ import (
 	"github.com/joshsziegler/zauth/models/user"
 )
 
-// LogRequest except those that start with '/static/'
-func LogRequest(next http.Handler) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if !strings.HasPrefix(r.RequestURI, "/static/") {
-			log.Info(r.RequestURI)
-		}
-		next.ServeHTTP(w, r)
-	})
-}
-
-// RequireLogin redirects the user to the login page IFF not already logged in
-func RequireLogin(next http.Handler) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		username := getUsername(w, r)
-		if username == nil { // Not logged in
-			http.Redirect(w, r, urlLogin, http.StatusFound)
-			return
-		}
-		// User IS logged in, allow them to continue
-		next.ServeHTTP(w, r)
-	})
-}
-
 // zauthContext is a struct passed to zauthHandlers with additional information
 // not in the standard HTTP handlers, such as User object.
 type zauthContext struct {
