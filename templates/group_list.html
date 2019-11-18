@@ -1,0 +1,29 @@
+{{template "header.html" .User }}
+
+<section>
+    <h4>All Groups <a href="/group/new" class="u-pull-right">New</a></h4>
+    {{ if ne .Message "" }}
+        <p class="alert" role="alert">{{ .Message }}</p>
+    {{ end }}
+    {{ if ne .Error "" }}
+        <p class="alert error" role="alert">{{ .Error }}</p>
+    {{ end }}
+    <table class="u-full-width">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{ range .Groups }}
+                <tr>
+                     <td>{{ .Name | html }}</td>
+                     <td>{{ .Description | html }}</td>
+                </tr>
+            {{ end }}
+        </tbody>
+    </table>
+</section>
+
+{{template "footer.html"}}

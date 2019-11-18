@@ -13,8 +13,8 @@ import (
 
 type LoginPageData struct {
 	Message   string
-	Username  string
 	Error     string
+	Username  string
 	CSRFField template.HTML
 }
 

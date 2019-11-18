@@ -30,9 +30,10 @@
                 {{ if . }} 
                     <a href="/users/{{ .Username }}">Me</a>
                     {{ if .IsAdmin }}
-                        <a href="/users" class="">Users</a>
-                        <a href="/user/new">New User</a>
-                         {{/* TODO: <a href="/groups" class="">Groups</a> */}}
+                        <a href="/users" class="">Users</a> 
+                         {{/* <a href="/user/new">New</a> */}}
+                        <a href="/groups" class="">Groups</a> 
+                        {{/* <a href="/group/new">New</a> */}}
                     {{ end }} 
                    
                     <a href="/logout" class="u-pull-right">Logout</a>

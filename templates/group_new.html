@@ -1,0 +1,28 @@
+{{template "header.html" .User }}
+
+<section>
+    <form method="post" action="/group/new">
+        <h4>New Group</h4>
+        {{ if ne .ErrorMessage "" }}
+            <p class="alert error">
+                <strong>Error:</strong> {{ .ErrorMessage }}
+            </p>
+        {{ end }}
+        <div>
+            <label for="NameInput">Name
+            </label>
+            <input id="NameInput" name="Name" type="text"
+                value="{{.Form.Name}}" class="u-full-width" required>
+        </div>
+        <div>
+            <label for="DescriptionInput">Description
+            </label>
+            <textarea id="DescriptionInput" name="Description" type="text"
+                class="u-full-width" required>{{.Form.Description}}</textarea>
+        </div>
+        {{ .CSRFField }}
+        <input class="button-primary u-full-width" type="submit" value="Create">
+    </form>
+</section>
+
+{{template "footer.html"}}

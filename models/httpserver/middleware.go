@@ -80,6 +80,9 @@ type zauthHandler = func(c *zauthContext, w http.ResponseWriter, r *http.Request
 //  - If there is an error, STOP continuing and render a proper error
 //  - If there are new flash messages, SAVE them
 //  - Render the page OR render the error
+//
+// TODO: Defer logging the request until we have the result, so we can log them
+//       on the same line like so: josh POST /group/new -> error: duplicate name
 func wrapHandler(router *mux.Router, subHandler zauthHandler, requireLogin bool) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		// Create the context that we pass to the subHandler
@@ -90,7 +93,8 @@ func wrapHandler(router *mux.Router, subHandler zauthHandler, requireLogin bool)
 		// Create a DB transaction for our context struct
 		tx, err := DB.Beginx()
 		if err != nil {
-			Error(w, 500, "Error", "Sorry, but the server encountered an error.", nil)
+			Error(w, 500, "Error",
+				"Sorry, but the server encountered an error.", nil)
 		}
 		c.Tx = tx
 		// Get username of user (or nil if they are not logged in)
@@ -103,7 +107,9 @@ func wrapHandler(router *mux.Router, subHandler zauthHandler, requireLogin bool)
 		}
 		// Redirect if this page requires authentication
 		if requireLogin && username == nil { // Not logged in
-			err = addNormalFlashMessage(w, r, "Sorry, but that page requires you to login first. If you were previously logged in, your session has expired.")
+			err = addNormalFlashMessage(w, r, "Sorry, but that page requires "+
+				"you to login first. If you were previously logged in, your "+
+				"session has expired.")
 			if err != nil {
 				log.Error(err)
 			}
@@ -115,7 +121,8 @@ func wrapHandler(router *mux.Router, subHandler zauthHandler, requireLogin bool)
 		if username != nil {
 			tempUser, err := user.GetUserWithGroups(tx, *username)
 			if err != nil {
-				Error(w, 500, "Error", "Sorry, but the server encountered an error.", nil)
+				Error(w, 500, "Error",
+					"Sorry, but the server encountered an error.", nil)
 				c.Tx.Commit()
 				return
 			}
