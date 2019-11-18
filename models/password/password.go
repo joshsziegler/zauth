@@ -16,7 +16,10 @@ func toBase64(b []byte) string {
 
 func hashMD5(password string) string {
 	hasher := md5.New()
-	hasher.Write([]byte(password))
+	_, err := hasher.Write([]byte(password))
+	if err != nil {
+		return ""
+	}
 	hashedPassword := hasher.Sum(nil)
 	return toBase64(hashedPassword)
 }
@@ -37,7 +40,10 @@ func validMD5(password string, hashedPassword string) (bool, error) {
 
 func hashSHA1(password string) string {
 	hasher := sha1.New()
-	hasher.Write([]byte(password))
+	_, err := hasher.Write([]byte(password))
+	if err != nil {
+		return ""
+	}
 	hashedPassword := hasher.Sum(nil)
 	return toBase64(hashedPassword)
 }
