@@ -44,7 +44,10 @@ func getFlashMessages(w http.ResponseWriter, r *http.Request) (messageFlash stri
 		messageFlash = fmt.Sprintf("%v", fm[0])
 	}
 	// Always save after retrieving flash messages so they are removed
-	session.Save(r, w)
+	err = session.Save(r, w)
+	if err != nil {
+		log.Error(err)
+	}
 	return
 }
 
@@ -62,7 +65,10 @@ func addNormalFlashMessage(w http.ResponseWriter, r *http.Request, message strin
 		return ErrGettingFlashMessages.Here()
 	}
 	session.AddFlash(message, normalFlashKey)
-	session.Save(r, w)
+	err = session.Save(r, w)
+	if err != nil {
+		log.Error(err)
+	}
 	return nil
 }
 
@@ -77,6 +83,9 @@ func addErrorFlashMessage(w http.ResponseWriter, r *http.Request, message string
 		return ErrGettingFlashMessages.Here()
 	}
 	session.AddFlash(message, errorFlashKey)
-	session.Save(r, w)
+	err = session.Save(r, w)
+	if err != nil {
+		log.Error(err)
+	}
 	return nil
 }

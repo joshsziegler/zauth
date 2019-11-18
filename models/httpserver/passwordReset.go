@@ -49,6 +49,9 @@ func PasswordResetGetPost(c *zauthContext, w http.ResponseWriter, r *http.Reques
 	// Token is valid: continue
 	// Create page data here so we don't forget to create the CSRF token
 	requestedUser, err := c.GetUser(requestedUsername)
+	if err != nil {
+		return err
+	}
 	data := userSetPasswordPageData{
 		//RequestingUser:    nil,
 		Message:           c.NormalFlashMessage,

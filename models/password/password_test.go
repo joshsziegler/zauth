@@ -46,8 +46,11 @@ func TestSSHA(t *testing.T) {
 
 func TestBCRYPT(t *testing.T) {
 	hashedPassword, err := hashBCRYPT(correctPassword)
+	if err != nil {
+		t.Errorf("hashBCRYPT Failed: %s", err)
+	}
 	ok, err := validBCRYPT("Testing123!", hashedPassword)
 	if !ok || err != nil {
-		t.Errorf("BCRYPT Failed: %v, %s", ok, err)
+		t.Errorf("validBCRYPT Failed: %v, %s", ok, err)
 	}
 }

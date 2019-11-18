@@ -110,7 +110,10 @@ func wrapHandler(router *mux.Router, subHandler zauthHandler, requireLogin bool)
 				log.Error(err)
 			}
 			http.Redirect(w, r, urlLogin, http.StatusFound)
-			c.Tx.Commit()
+			err = c.Tx.Commit()
+			if err != nil {
+				log.Error(err)
+			}
 			return
 		}
 		// Get and save user struct if they are logged in
@@ -119,7 +122,10 @@ func wrapHandler(router *mux.Router, subHandler zauthHandler, requireLogin bool)
 			if err != nil {
 				Error(w, 500, "Error",
 					"Sorry, but the server encountered an error.", nil)
-				c.Tx.Commit()
+				err = c.Tx.Commit()
+				if err != nil {
+					log.Error(err)
+				}
 				return
 			}
 			// Convert to pointer to allow us to check for an empty User using nil
@@ -139,9 +145,15 @@ func wrapHandler(router *mux.Router, subHandler zauthHandler, requireLogin bool)
 				Error(w, 500, "Error", merry.Details(err), nil)
 			}
 			// Rollback if the sub-handler failed
-			c.Tx.Rollback()
+			err = c.Tx.Rollback()
+			if err != nil {
+				log.Error(err)
+			}
 			return
 		}
-		c.Tx.Commit()
+		err = c.Tx.Commit()
+		if err != nil {
+			log.Error(err)
+		}
 	})
 }
