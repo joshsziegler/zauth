@@ -1,6 +1,7 @@
 package httpserver
 
 import (
+	"fmt"
 	"net/http"
 	"strings"
 
@@ -24,6 +25,24 @@ type zauthContext struct {
 	NormalFlashMessage string
 	ErrorFlashMessage  string
 	RouteVariables     map[string]string
+}
+
+// get the username from the secure session. If it doesn't exist, redirect to
+// the login page.
+//
+// Does NOT use the database!
+func getUsername(w http.ResponseWriter, r *http.Request) *string {
+	// Always returns a session, even if it's empty
+	session, err := store.Get(r, sessionName)
+	if err != nil {
+		log.Debug("secure session exists, but could not be decoded")
+	}
+	val := session.Values["Username"]
+	if val == nil { // User not logged in
+		return nil
+	}
+	username := fmt.Sprintf("%v", val)
+	return &username
 }
 
 // GetUser returns the specified User. This potentially avoids a second DB call

@@ -2,7 +2,6 @@ package httpserver
 
 import (
 	"encoding/json"
-	"fmt"
 	"html/template"
 	"net/http"
 	"strings"
@@ -50,24 +49,6 @@ var templateHelpers = template.FuncMap{
 	},
 	"HumanizeTime": humanize.Time,
 	"ToLower":      strings.ToLower,
-}
-
-// get the username from the secure session. If it doesn't exist, redirect to
-// the login page.
-//
-// Does NOT use the database!
-func getUsername(w http.ResponseWriter, r *http.Request) *string {
-	// Always returns a session, even if it's empty
-	session, err := store.Get(r, sessionName)
-	if err != nil {
-		log.Debug("secure session exists, but could not be decoded")
-	}
-	val := session.Values["Username"]
-	if val == nil { // User not logged in
-		return nil
-	}
-	username := fmt.Sprintf("%v", val)
-	return &username
 }
 
 // Listen performs setup and runs the Web server (blocking)
