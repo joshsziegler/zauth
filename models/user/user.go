@@ -12,9 +12,10 @@ import (
 )
 
 const (
-	// MySQL doesn't like Go's Zero-value for Dates (0000-00-00 00:00:00) so we
-	// use this instead - JZ 2019.08.22
-	mysqlZeroDate = `0001-01-01 00:00:00`
+	// MySQLZeroDate is a workaround for MySQL not supporting Go's Zero-value
+	// for Dates (0000-00-00 00:00:00). So instead, we have to set each MySQL
+	// date column to also have a default of this.
+	MysqlZeroDate = `0001-01-01 00:00:00`
 )
 
 var (
