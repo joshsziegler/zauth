@@ -138,10 +138,12 @@ func (h mysqlBackend) getAllUsersAndGroups() (entries []*ldap.Entry, err error) 
 		err = merry.Append(err, "error starting transaction")
 		return
 	}
-	defer tx.Commit()
-
 	users, groups, err := user2group.GetAll(tx)
 	if err != nil {
+		err = tx.Commit()
+		if err != nil {
+			err = merry.Wrap(err)
+		}
 		return
 	}
 
@@ -150,6 +152,10 @@ func (h mysqlBackend) getAllUsersAndGroups() (entries []*ldap.Entry, err error) 
 	}
 	for _, group := range groups {
 		entries = append(entries, groupToLDAPEntry(group))
+	}
+	err = tx.Commit()
+	if err != nil {
+		err = merry.Wrap(err)
 	}
 	return
 }
