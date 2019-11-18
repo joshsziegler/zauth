@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/ansel1/merry"
 	mUser "github.com/joshsziegler/zauth/models/user"
 )
 
@@ -22,8 +23,9 @@ func userSetEnabled(c *zauthContext, w http.ResponseWriter, r *http.Request) (er
 	} else if operation == "disable" {
 		err = mUser.UserDisable(requestedUsername)
 	} else {
-		// TODO: Add message specific to THIS argument
-		return ErrRequestArgument.Here()
+		return merry.Here(ErrRequestArgument).
+			WithMessagef("invalid operation '%s' (must be 'enable' or 'disable')",
+				operation)
 	}
 	// Set flash message indicating result
 	if err != nil {

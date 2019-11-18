@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/ansel1/merry"
 	"github.com/joshsziegler/zauth/models/user2group"
 )
 
@@ -29,8 +30,9 @@ func userAddRemoveGroups(c *zauthContext, w http.ResponseWriter, r *http.Request
 		flash = fmt.Sprintf("Removing user %s from group %s ", requestedUsername, group)
 		err = user2group.RemoveUserFromGroup(c.Tx, requestedUsername, group)
 	} else {
-		// TODO: Add message specific to THIS argument
-		return ErrRequestArgument.Here()
+		return merry.Here(ErrRequestArgument).
+			WithMessagef("invalid operation '%s' (must be 'add' or 'remove')",
+				operation)
 	}
 	// Set flash message indicating result
 	if err != nil {
