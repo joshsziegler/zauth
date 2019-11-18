@@ -106,7 +106,6 @@ func Listen(logger *logging.Logger, database *sqlx.DB, listenTo string,
 	r.Handle("/users/{username}", wrapHandler(r, UserDetailGet, true)).Methods("GET").Name("userDetail")
 	r.Handle("/users/{username}/password", wrapHandler(r, userSetPassword, true)).Methods("GET", "POST")
 	r.Handle("/users/{username}/{isEnabled:(?:enable|disable)}", wrapHandler(r, userSetEnabled, true)).Methods("GET")
-	r.Handle("/users/{username}/groups", wrapHandler(r, userGroupsGet, true)).Methods("GET")
 	r.Handle("/users/{username}/groups/{groupname}/{addOrRemove:(?:add|remove)}", wrapHandler(r, userAddRemoveGroups, true)).Methods("GET")
 	r.Handle("/groups", wrapHandler(r, GroupListGet, true)).Methods("GET")
 	r.Handle("/group/new", wrapHandler(r, NewGroupGet, true)).Methods("GET")
