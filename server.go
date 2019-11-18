@@ -29,7 +29,6 @@ func initLogging() {
 	logging.SetLevel(logging.INFO, programName)
 	format := "%{level:.4s} ▶ %{message}"
 	logging.SetFormatter(logging.MustStringFormatter(format))
-	return
 }
 
 func main() {
