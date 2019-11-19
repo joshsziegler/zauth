@@ -15,7 +15,7 @@ const (
 )
 
 var (
-	// store is our "global" secrets variable, which is accesible only through
+	// store is our "global" secrets variable, which is accessible only through
 	// the getters defined below
 	store secrets
 )

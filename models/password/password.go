@@ -77,7 +77,7 @@ func validSSHA(password string, hashedPassword string) (bool, error) {
 
 	data, err := base64.StdEncoding.DecodeString(hashedPassword[6:])
 	if len(data) < 21 || err != nil {
-		return false, merry.New("Base64 Decode Failed")
+		return false, merry.New("base64 Decode Failed")
 	}
 
 	newhash := hashSSHA(password, data[20:])
@@ -97,7 +97,7 @@ func hashBCRYPT(password string) (string, error) {
 }
 
 func validBCRYPT(password string, hashedPassword string) (bool, error) {
-	// this method only returns an error if the hash doesn't match, unliked
+	// this method only returns an error if the hash doesn't match, unlike
 	// our other methods which have different error conditions
 	err := bcrypt.CompareHashAndPassword([]byte(hashedPassword),
 		[]byte(password))
