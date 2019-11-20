@@ -11,7 +11,7 @@ import (
 	"github.com/joshsziegler/zauth/models/httpserver"
 	"github.com/joshsziegler/zauth/models/ldapserver"
 	"github.com/joshsziegler/zauth/models/user"
-	"github.com/joshsziegler/zauth/pkg/ztk/db"
+	"github.com/joshsziegler/zauth/pkg/db"
 )
 
 const programName = `zauth`

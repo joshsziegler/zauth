@@ -9,7 +9,7 @@ import (
 
 	"github.com/joshsziegler/zauth/models/file"
 	"github.com/joshsziegler/zauth/models/ldapserver"
-	"github.com/joshsziegler/zauth/pkg/ztk/db"
+	"github.com/joshsziegler/zauth/pkg/db"
 )
 
 const (
