@@ -1,5 +1,6 @@
 {{template "header.html" .RequestingUser }}
 
+{{$RequestedUser := .RequestedUser }}
 {{$RequestedUserUsername := .RequestedUser.Username | html}}
 <section>
     <h4>User Details</h4>
@@ -29,7 +30,7 @@
                 <th>Password</th>
                 <td>&middot;&middot;&middot;&middot;&middot;&middot;&middot;&middot;&middot;&middot;</td>
                 <td><a href="/users/{{ .RequestedUser.Username }}/password">Change</a></td>
-            </tr>           
+            </tr>
             {{ if .RequestingUser.IsAdmin }}
                 <tr>
                     <th>Status</th>
@@ -45,7 +46,7 @@
                 </tr>
                 <tr>
                     <th>Last Login</th>
-                    <td colspan="2">{{ HumanizeTime .RequestedUser.LastLogin }}</td> 
+                    <td colspan="2">{{ HumanizeTime .RequestedUser.LastLogin }}</td>
                 </tr>
             {{ end }}
             <tr>
@@ -54,11 +55,19 @@
                     <ul class="plain">
                         {{ range .GroupMembership }}
                             <li>
-                                {{- if .Member -}}
-                                    <a href="/users/{{ $RequestedUserUsername }}/groups/{{ .Name }}/remove" class="plain">&#128505</a> 
-                                {{- else -}} 
-                                    <a href="/users/{{ $RequestedUserUsername }}/groups/{{ .Name }}/add" class="plain">&#9744</a>
-                                {{- end }} 
+                                {{- if $RequestedUser.IsAdmin }}
+                                    {{- if .Member -}}
+                                        <a href="/users/{{ $RequestedUserUsername }}/groups/{{ .Name }}/remove" class="plain">&#128505</a>
+                                    {{- else -}}
+                                        <a href="/users/{{ $RequestedUserUsername }}/groups/{{ .Name }}/add" class="plain">&#9744</a>
+                                    {{- end }}
+                                {{- else -}}
+                                    {{- if .Member -}}
+                                        &#128505
+                                    {{- else -}}
+                                        &#9744
+                                    {{- end }}
+                                {{- end }}
                                 {{ .Name -}}
                             </li>
                         {{ else }}
