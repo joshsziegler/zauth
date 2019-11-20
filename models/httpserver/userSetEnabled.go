@@ -19,9 +19,9 @@ func userSetEnabled(c *zauthContext, w http.ResponseWriter, r *http.Request) (er
 	// Handle the request
 	operation := c.GetRouteVarTrim("isEnabled")
 	if operation == "enable" {
-		err = mUser.UserEnable(requestedUsername)
+		err = mUser.UserEnable(c.Tx, requestedUsername)
 	} else if operation == "disable" {
-		err = mUser.UserDisable(requestedUsername)
+		err = mUser.UserDisable(c.Tx, requestedUsername)
 	} else {
 		return merry.Here(ErrRequestArgument).
 			WithMessagef("invalid operation '%s' (must be 'enable' or 'disable')",

@@ -103,8 +103,8 @@ func (u User) IsAdmin() bool {
 // userSetEnable is a helper function for UserEnable and UserDisable.
 //
 // Note that isEnabled is flipped because the database uses Disabled!
-func userSetEnable(isEnabled bool, username string) error {
-	_, err := db.Exec(`UPDATE Users
+func userSetEnable(tx *sqlx.Tx, isEnabled bool, username string) error {
+	_, err := tx.Exec(`UPDATE Users
 		 			  SET Disabled=?
 		 			  WHERE Username=?`, !isEnabled, username)
 	if err != nil {
@@ -113,12 +113,12 @@ func userSetEnable(isEnabled bool, username string) error {
 	return nil
 }
 
-func UserEnable(username string) (err error) {
-	return userSetEnable(true, username)
+func UserEnable(tx *sqlx.Tx, username string) (err error) {
+	return userSetEnable(tx, true, username)
 }
 
-func UserDisable(username string) (err error) {
-	return userSetEnable(false, username)
+func UserDisable(tx *sqlx.Tx, username string) (err error) {
+	return userSetEnable(tx, false, username)
 }
 
 // GetUserWithGroups returns a single User struct, including the groups they
