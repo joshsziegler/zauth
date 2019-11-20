@@ -9,18 +9,12 @@ import (
 
 	"github.com/joshsziegler/zauth/models/file"
 	"github.com/joshsziegler/zauth/models/ldapserver"
+	"github.com/joshsziegler/zauth/pkg/ztk/db"
 )
 
 const (
 	configPath = `config.yml`
 )
-
-type databaseConfig struct {
-	Username string
-	Password string
-	Address  string
-	DBName   string
-}
 
 type httpConfig struct {
 	ListenTo string
@@ -30,7 +24,7 @@ type httpConfig struct {
 // Hash/Block Key (for secure cookies).
 type Config struct {
 	Production     bool
-	Database       databaseConfig
+	Database       db.Config
 	LDAP           ldapserver.LdapConfig
 	HTTP           httpConfig
 	SendGridAPIKey string
