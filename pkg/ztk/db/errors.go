@@ -1,4 +1,4 @@
-package mysql
+package db
 
 // The following covers a small set of the MySQL numerical error codes.
 // See https://dev.mysql.com/doc/refman/8.0/en/server-error-reference.html for
