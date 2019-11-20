@@ -93,12 +93,25 @@ func (h mysqlBackend) Bind(bindDN, bindPassword string, conn net.Conn) (
 			bindDN, err)
 		return ldap.LDAPResultInvalidCredentials, nil
 	}
-	err = user.Login(DB, username, bindPassword)
+	tx, err := DB.Beginx()
+	if err != nil {
+	}
+	err = user.Login(tx, username, bindPassword)
 	if err != nil {
 		log.Errorf("bind failure as %s: %s", username, err)
+		err = tx.Commit()
+		if err != nil {
+			log.Errorf("transaction error during Bind: %s", err)
+			return ldap.LDAPResultOperationsError, nil
+		}
 		return ldap.LDAPResultInvalidCredentials, nil
 	}
 	log.Infof("bind success as %s", username)
+	err = tx.Commit()
+	if err != nil {
+		log.Errorf("transaction error during Bind: %s", err)
+		return ldap.LDAPResultOperationsError, nil
+	}
 	return ldap.LDAPResultSuccess, nil
 }
 

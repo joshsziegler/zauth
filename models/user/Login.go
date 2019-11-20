@@ -10,11 +10,11 @@ import (
 )
 
 // Login returns nil IFF the account is not disabled AND the password is correct
-func Login(DB *sqlx.DB, username string, password string) (err error) {
+func Login(tx *sqlx.Tx, username string, password string) (err error) {
 	var correctPasswordHash string
 	var disabled bool
-	err = DB.QueryRowx(`SELECT PasswordHash, Disabled 
-						FROM Users 
+	err = tx.QueryRowx(`SELECT PasswordHash, Disabled
+						FROM Users
 						WHERE Username=?`,
 		username).Scan(&correctPasswordHash, &disabled)
 	if err != nil {
@@ -34,7 +34,7 @@ func Login(DB *sqlx.DB, username string, password string) (err error) {
 	}
 
 	// Update LastLogin
-	_, err = DB.Exec(`UPDATE Users
+	_, err = tx.Exec(`UPDATE Users
 		 			  SET LastLogin=?
 		 			  WHERE Username=?`, time.Now(), username)
 	if err != nil {
@@ -43,7 +43,7 @@ func Login(DB *sqlx.DB, username string, password string) (err error) {
 
 	// Update PasswordHash IFF it's using an insecure hashing method (e.g. MD5)
 	if insecure {
-		err = setUserPassword(username, password)
+		err = setUserPassword(tx, username, password)
 		if err != nil {
 			return err // already wrapped
 		}

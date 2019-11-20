@@ -48,7 +48,7 @@ func LoginGetPost(c *zauthContext, w http.ResponseWriter, r *http.Request) error
 		}
 
 		// Authenticate using the provided username and password
-		err := user.Login(DB, username, password)
+		err := user.Login(c.Tx, username, password)
 		if err != nil { // error, or invalid username and/or password
 			log.Info(err)
 			data.Username = username

@@ -6,6 +6,7 @@ import (
 	"github.com/ansel1/merry"
 	"github.com/dchest/passwordreset"
 	_ "github.com/go-sql-driver/mysql" // Blank import required for SQL drivers
+	"github.com/jmoiron/sqlx"
 
 	pw "github.com/joshsziegler/zauth/models/password"
 	"github.com/joshsziegler/zauth/models/secrets"
@@ -14,12 +15,12 @@ import (
 // setUserPassword hashes the given cleartext password and updates the database.
 //
 // Warning: This does NOT check the password for strength!
-func setUserPassword(username string, password string) error {
+func setUserPassword(tx *sqlx.Tx, username string, password string) error {
 	newPasswordHash, err := pw.Hash(password)
 	if err != nil {
 		return merry.Wrap(err)
 	}
-	_, err = db.Exec(`UPDATE Users
+	_, err = tx.Exec(`UPDATE Users
 					  SET PasswordHash=?,
 					      PasswordSet=?
 					  WHERE Username=?`, newPasswordHash, time.Now(), username)
@@ -32,10 +33,10 @@ func setUserPassword(username string, password string) error {
 
 // SetUserPassword checks the password's strength, and if ok, updates the
 // database.
-func SetUserPassword(username string, password string) error {
+func SetUserPassword(tx *sqlx.Tx, username string, password string) error {
 	// Get first and last name so we can pass to CheckPasswordRules()
 	var firstName, lastName string
-	err := db.QueryRowx(`SELECT FirstName, LastName
+	err := tx.QueryRowx(`SELECT FirstName, LastName
 					FROM Users
 					WHERE Username=?`,
 		username).Scan(&firstName, &lastName)
@@ -48,7 +49,7 @@ func SetUserPassword(username string, password string) error {
 		return err
 	}
 	// Everything is ok, so change the password hash in the database
-	err = setUserPassword(username, password)
+	err = setUserPassword(tx, username, password)
 	if err != nil {
 		return err
 	}

@@ -62,7 +62,7 @@ func PasswordResetGetPost(c *zauthContext, w http.ResponseWriter, r *http.Reques
 	case "POST":
 		newPassword := r.FormValue("NewPassword")
 		// Try to set the user's password (will check password rules)
-		err = user.SetUserPassword(requestedUsername, newPassword)
+		err = user.SetUserPassword(c.Tx, requestedUsername, newPassword)
 		if err != nil {
 			data.Error = merry.UserMessage(err)
 			Render(w, "user_set_password.html", data)
