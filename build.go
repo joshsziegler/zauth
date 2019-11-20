@@ -40,6 +40,6 @@ func main() {
 	fmt.Println("  - Go (into an executable)")
 	buildDate := time.Now().Format(time.RFC3339)
 	buildVers := getGitVersion()
-	runCommand("packr", "build", "-ldflags", "-X main.Version="+buildVers+" -X main.BuildDate="+buildDate)
+	runCommand("packr", "build", "-ldflags", "-X main.Version="+buildVers+" -X main.BuildDate="+buildDate, "cmd/zauth.go")
 	fmt.Println("\nBUILD COMPLETE")
 }
