@@ -7,7 +7,7 @@ import (
 	"github.com/ansel1/merry"
 	"github.com/gorilla/securecookie"
 
-	"github.com/joshsziegler/zauth/models/file"
+	"github.com/joshsziegler/zauth/pkg/file"
 )
 
 const (
