@@ -16,7 +16,7 @@ import (
 	"github.com/gobuffalo/packr"
 	logging "github.com/op/go-logging"
 
-	"github.com/joshsziegler/zauth/models/secrets"
+	"github.com/joshsziegler/zauth/pkg/secrets"
 )
 
 var log *logging.Logger
@@ -74,7 +74,7 @@ func Listen(logger *logging.Logger, database *sqlx.DB, listenTo string,
 	templates = MustLoadBoxedTemplates(boxTemplates)
 
 	// Create the HTTP route handler
-	r := mux.NewRouter()
+	r := mux.NewRouter().StrictSlash(true)
 	//r.NotFoundHandler = http.HandlerFunc(HandlerPageNotFound)
 	r.NotFoundHandler = wrapHandler(r, pageNotFound, false)
 	r.PathPrefix("/static/").Handler(http.StripPrefix("/static/", http.FileServer(boxStatic)))

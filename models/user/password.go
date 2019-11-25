@@ -9,7 +9,7 @@ import (
 	"github.com/jmoiron/sqlx"
 
 	pw "github.com/joshsziegler/zauth/models/password"
-	"github.com/joshsziegler/zauth/models/secrets"
+	"github.com/joshsziegler/zauth/pkg/secrets"
 )
 
 // setUserPassword hashes the given cleartext password and updates the database.
