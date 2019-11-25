@@ -1,13 +1,9 @@
 package httpserver
 
 import (
-	"encoding/json"
 	"html/template"
 	"net/http"
-	"strings"
-	"time"
 
-	humanize "github.com/dustin/go-humanize"
 	"github.com/gorilla/csrf"
 	"github.com/gorilla/mux"
 	"github.com/gorilla/sessions"
@@ -16,6 +12,7 @@ import (
 	"github.com/gobuffalo/packr"
 	logging "github.com/op/go-logging"
 
+	"github.com/joshsziegler/zauth/pkg/httpserver"
 	"github.com/joshsziegler/zauth/pkg/secrets"
 )
 
@@ -35,21 +32,6 @@ var store *sessions.CookieStore
 
 // templates holds our loaded Go/HTML templates
 var templates *template.Template
-
-// templateHelpers allows us to use these custom functions in our templates
-var templateHelpers = template.FuncMap{
-	"inc":      func(i int) int { return i + 1 },
-	"multiply": func(x int, y int) int { return x * y },
-	"marshal": func(v interface{}) template.JS {
-		a, _ := json.Marshal(v)
-		return template.JS(a)
-	},
-	"FormatTimeAsRFC822": func(t time.Time) string {
-		return t.Format("2006-01-02 15:04:05 MST")
-	},
-	"HumanizeTime": humanize.Time,
-	"ToLower":      strings.ToLower,
-}
 
 // Listen performs setup and runs the Web server (blocking)
 func Listen(logger *logging.Logger, database *sqlx.DB, listenTo string,
@@ -71,7 +53,7 @@ func Listen(logger *logging.Logger, database *sqlx.DB, listenTo string,
 	boxStatic := packr.NewBox("../../static")
 	boxTemplates := packr.NewBox("../../templates")
 	// Load our templates
-	templates = MustLoadBoxedTemplates(boxTemplates)
+	templates = httpserver.MustLoadBoxedTemplates(boxTemplates)
 
 	// Create the HTTP route handler
 	r := mux.NewRouter().StrictSlash(true)
