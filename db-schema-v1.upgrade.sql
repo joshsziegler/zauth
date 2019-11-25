@@ -1,0 +1,8 @@
+
+ALTER TABLE Users 
+	DROP COLUMN UserID,
+	DROP COLUMN GroupID,
+	DROP COLUMN HomeDirectory,
+	MODIFY PasswordHash varchar(300) NOT NULL DEFAULT '-',
+	MODIFY LastLogin datetime NOT NULL DEFAULT '0001-01-01 00:00:00',
+	ADD COLUMN PasswordSet datetime NOT NULL DEFAULT '0001-01-01 00:00:00' AFTER PasswordHash;
