@@ -9,12 +9,12 @@ import (
 
 	"io/ioutil"
 
-	"github.com/joshsziegler/zauth/models/email"
 	"github.com/joshsziegler/zauth/models/file"
 	"github.com/joshsziegler/zauth/models/httpserver"
 	"github.com/joshsziegler/zauth/models/ldapserver"
 	"github.com/joshsziegler/zauth/models/user"
 	"github.com/joshsziegler/zauth/pkg/db"
+	"github.com/joshsziegler/zauth/pkg/email"
 
 	"github.com/ansel1/merry"
 	_ "github.com/go-sql-driver/mysql" // Blank import required for SQL drivers

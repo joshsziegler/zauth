@@ -9,8 +9,8 @@ import (
 
 	"github.com/ansel1/merry"
 	"github.com/gorilla/csrf"
-	mail "github.com/joshsziegler/zauth/models/email"
 	mUser "github.com/joshsziegler/zauth/models/user"
+	"github.com/joshsziegler/zauth/pkg/email"
 )
 
 type formNewUser struct {
@@ -66,7 +66,7 @@ func NewUserPost(c *zauthContext, w http.ResponseWriter, r *http.Request) error 
 	// Send new user an email asking them to login and set their password
 	// TODO: Allow this email to be configured? - JZ
 	resetLink := newUser.GetPasswordResetToken(2) // TODO: Set expiration via config?
-	err = mail.Send("MindModeling", "no-reply@mindmodeling.org",
+	err = email.Send("MindModeling", "no-reply@mindmodeling.org",
 		newUser.CommonName(), newUser.Email,
 		"Your New MindModeling Account",
 		"A new account has been created",
