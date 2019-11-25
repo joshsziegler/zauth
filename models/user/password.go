@@ -8,7 +8,7 @@ import (
 	_ "github.com/go-sql-driver/mysql" // Blank import required for SQL drivers
 	"github.com/jmoiron/sqlx"
 
-	pw "github.com/joshsziegler/zauth/models/password"
+	pw "github.com/joshsziegler/zauth/pkg/password"
 	"github.com/joshsziegler/zauth/pkg/secrets"
 )
 

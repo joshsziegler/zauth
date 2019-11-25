@@ -6,9 +6,9 @@ import (
 
 	"github.com/ansel1/merry"
 	"github.com/gorilla/csrf"
-	"github.com/joshsziegler/zauth/models/password"
 	"github.com/joshsziegler/zauth/models/user"
 	mUser "github.com/joshsziegler/zauth/models/user"
+	"github.com/joshsziegler/zauth/pkg/password"
 )
 
 type userSetPasswordPageData struct {
