@@ -19,7 +19,7 @@ import (
 // PasswordResetGetPost is a sub-handler that processes password resets via
 // secure tokens. These tokens expire after a certain time, and are only valid
 // for the username they are created for. This handler does both GET AND POST.
-func PasswordResetGetPost(c *zauthContext, w http.ResponseWriter, r *http.Request) error {
+func PasswordResetGetPost(c *Context, w http.ResponseWriter, r *http.Request) error {
 	// Only allow anonymous users to use password reset links
 	if c.User != nil {
 		addErrorFlashMessage(w, r,

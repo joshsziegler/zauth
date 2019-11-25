@@ -35,7 +35,7 @@ func newFormNewUser(r *http.Request) formNewUser {
 }
 
 // NewUserGet is a sub-handler that shows the User creation page.
-func NewUserGet(c *zauthContext, w http.ResponseWriter, r *http.Request) error {
+func NewUserGet(c *Context, w http.ResponseWriter, r *http.Request) error {
 	// Check permissions
 	if !c.User.IsAdmin() {
 		return ErrPermissionDenied.Here()
@@ -47,7 +47,7 @@ func NewUserGet(c *zauthContext, w http.ResponseWriter, r *http.Request) error {
 }
 
 // NewUserPost is a sub-handler that processes the User creation form.
-func NewUserPost(c *zauthContext, w http.ResponseWriter, r *http.Request) error {
+func NewUserPost(c *Context, w http.ResponseWriter, r *http.Request) error {
 	// Check permissions
 	if !c.User.IsAdmin() {
 		return ErrPermissionDenied.Here()

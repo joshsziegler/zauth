@@ -10,7 +10,7 @@ import (
 
 // userAddRemoveGroups is a sub-handler that handles adding or removing a single
 // user from a single group.
-func userAddRemoveGroups(c *zauthContext, w http.ResponseWriter, r *http.Request) error {
+func userAddRemoveGroups(c *Context, w http.ResponseWriter, r *http.Request) error {
 	// Check permissions
 	if !c.User.IsAdmin() {
 		return ErrPermissionDenied.Here()

@@ -24,7 +24,7 @@ type userSetPasswordPageData struct {
 }
 
 // userSetPassword is a sub-handler that handles password changes
-func userSetPassword(c *zauthContext, w http.ResponseWriter, r *http.Request) error {
+func userSetPassword(c *Context, w http.ResponseWriter, r *http.Request) error {
 	// Get the requested username from the URL
 	requestedUsername := c.GetRouteVarTrim("username")
 	// Check permissions

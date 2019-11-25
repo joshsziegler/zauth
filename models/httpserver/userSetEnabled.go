@@ -9,7 +9,7 @@ import (
 )
 
 // userSetEnabled is a sub-handler that handles enabling or disabling a User
-func userSetEnabled(c *zauthContext, w http.ResponseWriter, r *http.Request) (err error) {
+func userSetEnabled(c *Context, w http.ResponseWriter, r *http.Request) (err error) {
 	// Get the requested username from the URL
 	requestedUsername := c.GetRouteVarTrim("username")
 	// Check permissions

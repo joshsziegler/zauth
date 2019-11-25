@@ -32,7 +32,7 @@ func newFormNewGroup(r *http.Request) formNewGroup {
 }
 
 // NewGroupGet is a sub-handler that shows the Group creation page.
-func NewGroupGet(c *zauthContext, w http.ResponseWriter, r *http.Request) error {
+func NewGroupGet(c *Context, w http.ResponseWriter, r *http.Request) error {
 	// Check permissions
 	if !c.User.IsAdmin() {
 		return ErrPermissionDenied.Here()
@@ -44,7 +44,7 @@ func NewGroupGet(c *zauthContext, w http.ResponseWriter, r *http.Request) error 
 }
 
 // NewGroupPost is a sub-handler that processes the Group creation form.
-func NewGroupPost(c *zauthContext, w http.ResponseWriter, r *http.Request) error {
+func NewGroupPost(c *Context, w http.ResponseWriter, r *http.Request) error {
 	// Check permissions
 	if !c.User.IsAdmin() {
 		return ErrPermissionDenied.Here()

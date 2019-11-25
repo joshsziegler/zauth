@@ -21,7 +21,7 @@ type userDetailData struct {
 }
 
 // UserDetailGet is a sub-handler that shows the details for a specific user.
-func UserDetailGet(c *zauthContext, w http.ResponseWriter, r *http.Request) error {
+func UserDetailGet(c *Context, w http.ResponseWriter, r *http.Request) error {
 	// Get the requested username from the URL
 	requestedUsername := c.GetRouteVarTrim("username")
 	// Check permissions

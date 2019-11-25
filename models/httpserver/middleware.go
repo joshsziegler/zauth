@@ -12,9 +12,9 @@ import (
 	"github.com/joshsziegler/zauth/models/user"
 )
 
-// zauthContext is a struct passed to zauthHandlers with additional information
-// not in the standard HTTP handlers, such as User object.
-type zauthContext struct {
+// Context is a struct passed to Handlers with additional information not
+// in the standard HTTP handlers, such as User object.
+type Context struct {
 	// Router is the Gorilla-based router. It's included here so we can route
 	// names can be reversed (e.g. what is the URI for a user's details page?).
 	Router *mux.Router
@@ -48,7 +48,7 @@ func getUsername(w http.ResponseWriter, r *http.Request) *string {
 // GetUser returns the specified User. This potentially avoids a second DB call
 // if the HTTP request is being made by this user, and is thus already loaded
 // into memory.
-func (c *zauthContext) GetUser(username string) (user.User, error) {
+func (c *Context) GetUser(username string) (user.User, error) {
 	if c.User != nil && c.User.Username == username {
 		return *c.User, nil
 	}
@@ -56,16 +56,16 @@ func (c *zauthContext) GetUser(username string) (user.User, error) {
 }
 
 // GetRouteVarTrim returns the whitespace trimmed Gorilla Mux Route Variable.
-func (c *zauthContext) GetRouteVarTrim(varName string) string {
+func (c *Context) GetRouteVarTrim(varName string) string {
 	return strings.Trim(c.RouteVariables[varName], " ")
 }
 
-// zauthHandler adds a context argument and is used with handleWrap
-type zauthHandler = func(c *zauthContext, w http.ResponseWriter, r *http.Request) error
+// Handler adds a context argument and is used with handleWrap
+type Handler = func(c *Context, w http.ResponseWriter, r *http.Request) error
 
-// wrapHandler provides a wrapper to page-specific handlers. It handles logging,
+// Wrap provides a wrapper to page-specific handlers. It handles logging,
 // getting and checking user authentication, flash messages and error rendering.
-// The sub handler MUST implement zauthHandler.
+// The sub handler MUST implement Handler.
 //
 // Order of operations:
 //  - Get the user object if logged in
@@ -79,10 +79,10 @@ type zauthHandler = func(c *zauthContext, w http.ResponseWriter, r *http.Request
 //
 // TODO: Defer logging the request until we have the result, so we can log them
 //       on the same line like so: josh POST /group/new -> error: duplicate name
-func wrapHandler(router *mux.Router, subHandler zauthHandler, requireLogin bool) http.Handler {
+func Wrap(router *mux.Router, subHandler Handler, requireLogin bool) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		// Create the context that we pass to the subHandler
-		c := zauthContext{
+		c := Context{
 			Router:         router,
 			RouteVariables: mux.Vars(r),
 		}

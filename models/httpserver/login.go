@@ -19,7 +19,7 @@ type LoginPageData struct {
 }
 
 // LoginGetPost handles a user's request to view the login page (GET and POST).
-func LoginGetPost(c *zauthContext, w http.ResponseWriter, r *http.Request) error {
+func LoginGetPost(c *Context, w http.ResponseWriter, r *http.Request) error {
 	if c.User != nil {
 		// User is already logged in, so redirect them to their details page
 		url, err := c.Router.Get("userDetail").URL("username", c.User.Username)

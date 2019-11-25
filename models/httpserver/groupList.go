@@ -15,7 +15,7 @@ type groupListData struct {
 }
 
 // GroupListGet shows the user a list of all current zauth groups.
-func GroupListGet(c *zauthContext, w http.ResponseWriter, r *http.Request) error {
+func GroupListGet(c *Context, w http.ResponseWriter, r *http.Request) error {
 	// Only admins can view this page
 	if !c.User.IsAdmin() {
 		return ErrPermissionDenied.Here()
