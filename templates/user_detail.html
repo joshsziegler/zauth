@@ -1,6 +1,6 @@
 {{template "header.html" .RequestingUser }}
 
-{{$RequestedUser := .RequestedUser }}
+{{$RequestingUser := .RequestingUser }}
 {{$RequestedUserUsername := .RequestedUser.Username | html}}
 <section>
     <h4>User Details</h4>
@@ -55,7 +55,7 @@
                     <ul class="plain">
                         {{ range .GroupMembership }}
                             <li>
-                                {{- if $RequestedUser.IsAdmin }}
+                                {{- if $RequestingUser.IsAdmin }}
                                     {{- if .Member -}}
                                         <a href="/users/{{ $RequestedUserUsername }}/groups/{{ .Name }}/remove" class="plain">&#128505</a>
                                     {{- else -}}
