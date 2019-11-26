@@ -16,22 +16,21 @@ import (
 	"github.com/joshsziegler/zauth/pkg/secrets"
 )
 
-var log *logging.Logger
-
-// DB is our shared database connection (handles connection pooling, and is
-// goroutine-safe)
-var DB *sqlx.DB
+var (
+	log *logging.Logger
+	// DB is our shared database connection (handles connection pooling, and is
+	// goroutine-safe)
+	DB *sqlx.DB
+	// secure session store
+	store *sessions.CookieStore
+	// templates holds our loaded Go/HTML templates
+	templates *template.Template
+)
 
 const (
 	sessionName = `zauth-session`
 	urlLogin    = `/login`
 )
-
-// secure session store
-var store *sessions.CookieStore
-
-// templates holds our loaded Go/HTML templates
-var templates *template.Template
 
 // Listen performs setup and runs the Web server (blocking)
 func Listen(logger *logging.Logger, database *sqlx.DB, listenTo string,
