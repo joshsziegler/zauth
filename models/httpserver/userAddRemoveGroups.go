@@ -36,10 +36,10 @@ func userAddRemoveGroups(c *Context, w http.ResponseWriter, r *http.Request) err
 	}
 	// Set flash message indicating result
 	if err != nil {
-		addErrorFlashMessage(w, r, flash+"failed.")
+		c.AddNormalFlash(flash + "failed.")
 		return err
 	}
-	addNormalFlashMessage(w, r, flash+"succeeded.")
+	c.AddNormalFlash(flash + "succeeded.")
 	// Redirect them to the requested user's details page
 	http.Redirect(w, r, "/users/"+requestedUsername, http.StatusFound)
 	return nil

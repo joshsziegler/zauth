@@ -12,6 +12,14 @@ import (
 	"github.com/joshsziegler/zauth/models/user"
 )
 
+const (
+	flashMessageSessionName = `zauth-flashes`
+	errorFlashKey           = `error-flash`
+	normalFlashKey          = `message-flash`
+	errGetFlashMessages     = "error getting flash messages"
+	errAddFlashMessage      = "error while adding a normal flash message"
+)
+
 // Context is a struct passed to Handlers with additional information not
 // in the standard HTTP handlers, such as User object.
 type Context struct {
@@ -25,6 +33,8 @@ type Context struct {
 	NormalFlashMessage string
 	ErrorFlashMessage  string
 	RouteVariables     map[string]string
+	Response           http.ResponseWriter
+	Request            *http.Request
 }
 
 // get the username from the secure session. If it doesn't exist, redirect to
@@ -85,6 +95,8 @@ func Wrap(router *mux.Router, subHandler Handler, requireLogin bool) http.Handle
 		c := Context{
 			Router:         router,
 			RouteVariables: mux.Vars(r),
+			Response:       w,
+			Request:        r,
 		}
 		// Create a DB transaction for our context struct
 		tx, err := DB.Beginx()
@@ -103,8 +115,8 @@ func Wrap(router *mux.Router, subHandler Handler, requireLogin bool) http.Handle
 		}
 		// Redirect if this page requires authentication
 		if requireLogin && username == nil { // Not logged in
-			addNormalFlashMessage(w, r, "Sorry, but that page requires you to "+
-				"login first. If you were previously logged in, your session "+
+			c.AddNormalFlash("Sorry, but that page requires you to " +
+				"login first. If you were previously logged in, your session " +
 				"has expired.")
 			http.Redirect(w, r, urlLogin, http.StatusFound)
 			err = c.Tx.Commit()
@@ -129,7 +141,7 @@ func Wrap(router *mux.Router, subHandler Handler, requireLogin bool) http.Handle
 			c.User = &tempUser
 		}
 		// Get flash messages, if any
-		c.NormalFlashMessage, c.ErrorFlashMessage = getFlashMessages(w, r)
+		c.getFlashMessages()
 		// Run the page-specific handler, which renders the page unless there is an error
 		err = subHandler(&c, w, r)
 		if err != nil {
@@ -153,4 +165,73 @@ func Wrap(router *mux.Router, subHandler Handler, requireLogin bool) http.Handle
 			log.Error(err)
 		}
 	})
+}
+
+// getFlashMessages gets a single error flash message and a single normal
+// flash message. This is to restrict the HTTP handlers to a single, most-
+// important message of each type.
+//
+// Normal flash messages are not errors, and are typically informing the user
+// that an operation was successful such as logging out, or creating a new user.
+//
+// This method isn't public, because Wrap() should be the only one calling it.
+func (c *Context) getFlashMessages() {
+	session, err := store.Get(c.Request, flashMessageSessionName)
+	if err != nil {
+		// This could be an error, but more likely there simply aren't any
+		// flash message set. So simply return empty strings for both.
+		return
+	}
+	// Get any error flash message
+	fm := session.Flashes(errorFlashKey)
+	if fm != nil {
+		c.ErrorFlashMessage = fmt.Sprintf("%v", fm[0])
+	}
+	// Get any normal flash message
+	fm = session.Flashes(normalFlashKey)
+	if fm != nil {
+		c.NormalFlashMessage = fmt.Sprintf("%v", fm[0])
+	}
+	// Always save after retrieving flash messages so they are removed
+	err = session.Save(c.Request, c.Response)
+	if err != nil {
+		log.Error(err)
+	}
+}
+
+// AddNormalFlash adds a flash message to the store to be viewed by the user
+// upon next page request.
+//
+// If you need to add a flash message, you should do so before writing to the
+// response(Writer)! This is due to gorilla's session.Save().
+//
+// Normal flash messages are not errors, and are typically informing the user
+// that an operation was successful such as logging out, or creating a new user.
+func (c *Context) AddNormalFlash(message string) {
+	session, err := store.Get(c.Request, flashMessageSessionName)
+	if err != nil {
+		log.Error(merry.Prepend(err, errGetFlashMessages))
+	}
+	session.AddFlash(message, normalFlashKey)
+	err = session.Save(c.Request, c.Response)
+	if err != nil {
+		log.Error(merry.Prepend(err, errAddFlashMessage))
+	}
+}
+
+// AddErrorFlash adds an error flash message to the store to be viewed by the
+// user upon next page request.
+//
+// If you need to add a flash message, you should do so before writing to the
+// response(Writer)! This is due to gorilla's session.Save().
+func (c *Context) AddErrorFlash(message string) {
+	session, err := store.Get(c.Request, flashMessageSessionName)
+	if err != nil {
+		log.Error(merry.Prepend(err, errGetFlashMessages))
+	}
+	session.AddFlash(message, errorFlashKey)
+	err = session.Save(c.Request, c.Response)
+	if err != nil {
+		log.Error(merry.Prepend(err, errAddFlashMessage))
+	}
 }

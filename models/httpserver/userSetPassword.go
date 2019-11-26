@@ -59,7 +59,7 @@ func userSetPassword(c *Context, w http.ResponseWriter, r *http.Request) error {
 			Render(w, "user_set_password.html", data)
 			return nil
 		}
-		addNormalFlashMessage(w, r, "Password changed successfully.")
+		c.AddNormalFlash("Password changed successfully.")
 		http.Redirect(w, r, "/users/"+requestedUsername, http.StatusFound)
 		return nil
 	}

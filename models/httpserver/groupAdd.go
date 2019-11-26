@@ -63,7 +63,7 @@ func NewGroupPost(c *Context, w http.ResponseWriter, r *http.Request) error {
 
 	// New group created successfully, redirect them to the list page?
 	msg := fmt.Sprintf("Group %s successfully created.", form.Name)
-	addNormalFlashMessage(w, r, msg)
+	c.AddNormalFlash(msg)
 	http.Redirect(w, r, "/groups", 302)
 	return nil
 }

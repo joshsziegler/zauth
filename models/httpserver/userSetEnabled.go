@@ -29,9 +29,9 @@ func userSetEnabled(c *Context, w http.ResponseWriter, r *http.Request) (err err
 	}
 	// Set flash message indicating result
 	if err != nil {
-		addErrorFlashMessage(w, r, fmt.Sprintf("Failed to %s user.", operation))
+		c.AddNormalFlash(fmt.Sprintf("Failed to %s user.", operation))
 	} else {
-		addNormalFlashMessage(w, r, fmt.Sprintf("User successfully %sd.",
+		c.AddNormalFlash(fmt.Sprintf("User successfully %sd.",
 			operation))
 	}
 	// Redirect them to the requested user's details page

@@ -80,13 +80,13 @@ func NewUserPost(c *Context, w http.ResponseWriter, r *http.Request) error {
 		// User was created successfully, but the password email failed
 		msg := fmt.Sprintf("User %s successfully created, but their password reset email failed to send. %s",
 			newUser.Username, err)
-		addErrorFlashMessage(w, r, msg)
+		c.AddNormalFlash(msg)
 		return err
 	}
 	// New User created successfully, redirect them to its page
 	msg := fmt.Sprintf("User %s successfully created. They were sent an email to set their password.",
 		newUser.Username)
-	addNormalFlashMessage(w, r, msg)
+	c.AddNormalFlash(msg)
 	http.Redirect(w, r, "/users/"+newUser.Username, 302)
 	return nil
 }
