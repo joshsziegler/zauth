@@ -83,34 +83,36 @@ func (h mysqlBackend) Bind(bindDN, bindPassword string, conn net.Conn) (
 
 	if bindDN == "" && bindPassword == "" {
 		// Always allow anonymous binds
-		log.Info("anonymous bind")
+		log.Info("LDAP: anonymous bind")
 		return ldap.LDAPResultSuccess, nil
 	}
 
 	// User is trying to bind as a particular user, so check their password
 	username, err := getUsernameFromUID(bindDN)
 	if err != nil {
-		log.Errorf("bind failure: could not parse username from %s (%s)",
+		log.Errorf("LDAP: bind failure: could not parse username from %s (%s)",
 			bindDN, err)
 		return ldap.LDAPResultInvalidCredentials, nil
 	}
 	tx, err := DB.Beginx()
 	if err != nil {
+		log.Errorf("LDAP: error starting transaction during Bind: %s", err)
+		return ldap.LDAPResultOperationsError, nil
 	}
 	err = user.Login(tx, username, bindPassword)
 	if err != nil {
-		log.Errorf("bind failure as %s: %s", username, err)
+		log.Errorf("LDAP: bind failure as %s: %s", username, err)
 		err = tx.Commit()
 		if err != nil {
-			log.Errorf("transaction error during Bind: %s", err)
+			log.Errorf("LDAP: transaction error during Bind: %s", err)
 			return ldap.LDAPResultOperationsError, nil
 		}
 		return ldap.LDAPResultInvalidCredentials, nil
 	}
-	log.Infof("bind success as %s", username)
+	log.Infof("LDAP: bind success as %s", username)
 	err = tx.Commit()
 	if err != nil {
-		log.Errorf("transaction error during Bind: %s", err)
+		log.Errorf("LDAP: transaction error during Bind: %s", err)
 		return ldap.LDAPResultOperationsError, nil
 	}
 	return ldap.LDAPResultSuccess, nil
@@ -141,7 +143,7 @@ func (h mysqlBackend) Search(boundDN string, searchReq ldap.SearchRequest,
 
 // Close handles client disconnections
 func (h mysqlBackend) Close(boundDN string, conn net.Conn) error {
-	log.Debug("closing connection")
+	log.Debug("LDAP: closing connection")
 	conn.Close()
 	return nil
 }
