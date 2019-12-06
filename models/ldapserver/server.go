@@ -16,24 +16,24 @@ import (
 	"github.com/joshsziegler/zauth/models/user2group"
 )
 
-// LdapConfig is used to pass required configuration options for the LDAP server
-type LdapConfig struct {
+// Config is used to pass required configuration options for the LDAP server
+type Config struct {
 	BaseDN   string
 	UserOU   string
 	GroupOU  string
 	ListenTo string
 }
 
-// We use a global config, because it should be read-only after initial loading
-var config LdapConfig
-
-var log *logging.Logger
-
-// DB is the shared (via connection pooling) database connection; goroutine-safe
-var DB *sqlx.DB
+var (
+	// We use a global config, because it should be read-only after initial loading
+	config Config
+	log    *logging.Logger
+	// DB is the shared (via connection pooling) database connection; goroutine-safe
+	DB *sqlx.DB
+)
 
 // Listen performs setup and runs the LDAP server (blocking)
-func Listen(logger *logging.Logger, database *sqlx.DB, config LdapConfig) {
+func Listen(logger *logging.Logger, database *sqlx.DB, config Config) {
 	log = logger
 	DB = database
 	// Create our LDAP-server

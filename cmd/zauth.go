@@ -42,22 +42,17 @@ type httpConfig struct {
 	ListenTo string
 }
 
-// Config stores the server options such as IP/NIC to listen on, port and
-// Hash/Block Key (for secure cookies).
+// Config stores the all server options.
 type Config struct {
 	Production     bool
 	Database       db.Config
-	LDAP           ldapserver.LdapConfig
+	LDAP           ldapserver.Config
 	HTTP           httpConfig
 	SendGridAPIKey string
 }
 
-// mustLoadConfigs loads and returns our configuration from a YAML file or panic.
-//
-// - If no value is given in that file, defaults are used/created as needed.
-// - The config is always written back to disk in order to preserve the Hash
-//   and Block Keys if they are generated.
-func mustLoadConfigs() (c Config) {
+// mustLoadConfig loads and returns our configuration from a YAML file or panic.
+func mustLoadConfig() (c Config) {
 	// Read the existing config file from disk
 	if file.Exists(configPath) {
 		data, err := ioutil.ReadFile(configPath)
@@ -84,7 +79,7 @@ func initLogging() {
 func main() {
 	initLogging()
 	log.Info(fmt.Sprintf("%s %s (Built: %s)", programName, Version, BuildDate))
-	config = mustLoadConfigs()
+	config = mustLoadConfig()
 	DB = db.MustConnect(log, config.Database)
 	user.Init(log, DB)
 	email.Init(config.SendGridAPIKey)
