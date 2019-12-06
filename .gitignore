@@ -1,5 +1,7 @@
 zauth
 config.yml
 secrets.json
+.task
+public/style.css
 # Vim swap files
 *.swp

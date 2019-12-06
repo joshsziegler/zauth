@@ -18,13 +18,13 @@ nav {
     background: #2d2d2d;
 	font-size: 1.6rem;
     font-weight: bold;
-    box-shadow: 0 4px  5px  0   rgba(0,0,0,.14), 
-                0 1px 10px  0   rgba(0,0,0,.12), 
+    box-shadow: 0 4px  5px  0   rgba(0,0,0,.14),
+                0 1px 10px  0   rgba(0,0,0,.12),
                 0 2px  4px -1px rgba(0,0,0,.2);
 }
 nav a {
 	text-decoration: none;
-    color: #f7f7f7; 
+    color: #f7f7f7;
 }
 nav a:not(:last-child){
     margin-right: 2.5rem;
@@ -61,11 +61,11 @@ a.plain {
     text-decoration: none;
 }
 /* Margin Top - 1.0Rem */
-.mt-10r { 
+.mt-10r {
 	margin-top: 1rem;
 }
 /* Margin Left - 0.5Rem */
-.ml-05r { 
+.ml-05r {
 	margin-left: 0.5rem;
 }
 /* Show a simple message using italic text and blue left-hand border */
@@ -91,10 +91,10 @@ span.oi.green {
     color: #568203;
 }
 /* Show a small question mark denoting that information is available if the user
- * hovers or clicks on this element 
+ * hovers or clicks on this element
  *
  * Example:
- *   <span class="oi help-icon" data-glyph="question-mark" aria-hidden="true" 
+ *   <span class="oi help-icon" data-glyph="question-mark" aria-hidden="true"
  *         title="Help?"></span>
  */
 span.oi.help-icon[data-glyph="question-mark"] {

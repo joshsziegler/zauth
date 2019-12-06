@@ -49,7 +49,7 @@ func Listen(logger *logging.Logger, database *sqlx.DB, listenTo string,
 		// Secure:   true,                    // Only sent over HTTPS
 	}
 	// Load static assets (from disk [dev] or binary [build])
-	boxStatic := packr.NewBox("../../static")
+	boxStatic := packr.NewBox("../../public")
 	boxTemplates := packr.NewBox("../../templates")
 	// Load our templates
 	templates = httpserver.MustLoadBoxedTemplates(boxTemplates)

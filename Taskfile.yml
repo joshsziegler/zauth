@@ -1,0 +1,45 @@
+# https://taskfile.dev
+
+version: '2'
+
+vars:
+  EXE: zauth{{exeExt}}
+
+output: prefixed
+
+tasks:
+  default:
+    cmds:
+      - task: run
+
+  run:
+    desc: Build and run the web app.
+    cmds:
+      - task: build
+      - ./{{.EXE}}
+
+  build:
+    desc: Build the web app as a single binary.
+    deps: [css]
+    cmds:
+        - packr build -ldflags="-X main.Version={{.VERSION}} -X main.BuildDate={{now | date "2006-01-02T15:04:05Z07:00"}}" -o {{.EXE}} cmd/zauth.go
+    vars:
+      VERSION:
+        sh: git describe --dirty
+    sources:
+      - ./**/*.go
+
+  css:
+    desc: Bundle and minimize CSS
+    cmds:
+      - minify -o public/style.css css
+    sources:
+      - css/*.css
+    generates:
+      - public/style.css
+    method: checksum
+
+  test:
+    desc: Run all the go tests.
+    cmds:
+      - go test ./...
