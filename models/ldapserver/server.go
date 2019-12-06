@@ -1,6 +1,7 @@
 package ldapserver
 
 import (
+	"fmt"
 	"net"
 	"strconv"
 	"strings"
@@ -124,13 +125,16 @@ func (h mysqlBackend) Search(boundDN string, searchReq ldap.SearchRequest,
 	// Get username, assuming there will be no error since they already bound
 	username, _ := getUsernameFromUID(boundDN)
 
-	log.Infof("search as %s: baseDN: \"%s\" filter: \"%s\"", username,
-		searchReq.BaseDN, searchReq.Filter)
+	scope := ldap.ScopeMap[searchReq.Scope]
+	msg := fmt.Sprintf(
+		`LDAP: Search by: "%s" BaseDN: "%s" Scope: "%s" Filter: "%s" Attributes: %+v`,
+		username, searchReq.BaseDN, scope, searchReq.Filter, searchReq.Attributes)
 	entries, err := h.getAllUsersAndGroups()
 	if err != nil {
-		log.Errorf("search failure as %s: %s", username, err)
+		log.Errorf(`%s FAILED: "%s"`, msg, err)
 		return ldap.ServerSearchResult{ResultCode: ldap.LDAPResultOperationsError}, nil
 	}
+	log.Info(msg)
 	return ldap.ServerSearchResult{entries, []string{}, []ldap.Control{},
 		ldap.LDAPResultSuccess}, nil
 }
