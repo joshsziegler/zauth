@@ -14,8 +14,8 @@ tasks:
 
   run:
     desc: Build and run the web app.
+    deps: [build]
     cmds:
-      - task: build
       - ./{{.EXE}}
 
   build:
@@ -26,8 +26,9 @@ tasks:
     vars:
       VERSION:
         sh: git describe --dirty
+    method: checksum
     sources:
-      - ./**/*.go
+      - '**/*.go'
 
   css:
     desc: Bundle and minimize CSS
