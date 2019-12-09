@@ -159,7 +159,7 @@ func (h mysqlBackend) getAllUsersAndGroups() (entries []*ldap.Entry, err error) 
 	}
 	users, groups, err := user2group.GetAll(tx)
 	if err != nil {
-		err = tx.Commit()
+		_ = tx.Commit() // ignore error if we're responding to an error
 		if err != nil {
 			err = merry.Wrap(err)
 		}
@@ -203,7 +203,7 @@ func groupToLDAPEntry(g *mGroup.Group) *ldap.Entry {
 		config.BaseDN,
 		[]*ldap.EntryAttribute{
 			{"cn", []string{g.Name}},
-			{"gidNumber", []string{strconv.FormatInt(g.UnixGroupID, 10)}},
+			{"gidNumber", []string{strconv.FormatInt(g.UnixGroupID(), 10)}},
 			{"description", []string{g.Description}},
 			{"objectClass", []string{"top"}},
 			{"objectClass", []string{"posixGroup"}},

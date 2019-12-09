@@ -36,8 +36,15 @@ type Group struct {
 	ID          int64  `db:"ID"`
 	Name        string `db:"Name"`
 	Description string `db:"Description"`
-	UnixGroupID int64  `db:"GroupID"`
 	Members     []string
+}
+
+// UnixGroupID is always their database ID + 100.
+// This assumes that regular groups start at 100.
+//
+// ** Doesn't use a pointer to `u` so it can be use in HTML templates.
+func (g Group) UnixGroupID() int64 {
+	return g.ID + 100
 }
 
 func GetGroupsSliceWithoutUsers(tx *sqlx.Tx) (groups []*Group, err error) {
