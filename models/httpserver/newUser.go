@@ -72,8 +72,8 @@ func NewUserPost(c *Context, w http.ResponseWriter, r *http.Request) error {
 		"A new account has been created",
 		`<p>Hello `+newUser.CommonName()+`,</p>
 		<p>A new account has been created for you on MindModeling. Your username is <b>`+newUser.Username+`</b>. To complete
-		the setup, you need to 
-		<a href="http://localhost:8888/reset-password/`+resetLink+`">
+		the setup, you need to
+		<a href="http://user.mindmodeling.org/reset-password/`+resetLink+`">
 		set your password here</a>. This link is valid for the next `+strconv.Itoa(8)+`
 		hours.</p>`)
 	if err != nil {
