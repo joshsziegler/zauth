@@ -43,7 +43,7 @@ func Listen(logger *logging.Logger, database *sqlx.DB, listenTo string,
 	// Set Cookie options to expire sessions and protect against some attacks
 	store.Options = &sessions.Options{
 		Path:     "/",                  // Send cookies with every page request for this domain
-		MaxAge:   60 * 15,              // Expire in 15 minutes to force logout
+		MaxAge:   60 * 15,              // Expire in 15 minutes to force logout TODO: Allow to be configured
 		SameSite: http.SameSiteLaxMode, // XSS protection; See:  https://developer.mozilla.org/en-US/docs/Web/HTTP/Cookies#SameSite_cookies
 		HttpOnly: true,                 // Prevent JavaScript access to this cookie
 		// Secure:   true,                    // Only sent over HTTPS
