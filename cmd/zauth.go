@@ -4,10 +4,13 @@ import (
 	"fmt"
 	"os"
 
+	"io/ioutil"
+
+	"github.com/ansel1/merry"
+	_ "github.com/go-sql-driver/mysql" // Blank import required for SQL drivers
+	"github.com/go-yaml/yaml"
 	"github.com/jmoiron/sqlx"
 	logging "github.com/op/go-logging"
-
-	"io/ioutil"
 
 	"github.com/joshsziegler/zauth/models/httpserver"
 	"github.com/joshsziegler/zauth/models/ldapserver"
@@ -15,10 +18,6 @@ import (
 	"github.com/joshsziegler/zauth/pkg/db"
 	"github.com/joshsziegler/zauth/pkg/email"
 	"github.com/joshsziegler/zauth/pkg/file"
-
-	"github.com/ansel1/merry"
-	_ "github.com/go-sql-driver/mysql" // Blank import required for SQL drivers
-	yaml "gopkg.in/yaml.v2"
 )
 
 const (
