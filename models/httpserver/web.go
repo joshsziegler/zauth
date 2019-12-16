@@ -56,7 +56,6 @@ func Listen(logger *logging.Logger, database *sqlx.DB, listenTo string,
 
 	// Create the HTTP route handler
 	r := mux.NewRouter().StrictSlash(true)
-	//r.NotFoundHandler = http.HandlerFunc(HandlerPageNotFound)
 	r.NotFoundHandler = Wrap(r, pageNotFound, false)
 	r.PathPrefix("/static/").Handler(http.StripPrefix("/static/", http.FileServer(boxStatic)))
 	r.Handle("/", Wrap(r, LoginOrUserPageGet, false)).Methods("GET")
