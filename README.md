@@ -1,17 +1,40 @@
 # zauth
 
-## Compile
+## Build and Run
+
+The build process requires:
+
+- Git
+- Go 1.13+
+- MySQL 5.7+
+- Task
+- Minify
+- Packr
+
+We will leave installing Go and MySQL to you. Installing Task, Minify, and Packr
+can be done like this:
 
 ```sh
-$ go get -u github.com/gobuffalo/packr/packr # Only need to run this once
-$ go run build.go
+$ go get -u github.com/go-task/task/cmd/task
+$ go get -u github.com/tdewolff/minify/cmd/minify
+$ go get -u github.com/gobuffalo/packr/packr
 ```
 
-## Run
+After that you can now build and run the application by using Task from the
+command line
 
 ```sh
-./zauth
+$ task build
+$ ./zauth
 ```
+
+Or you can have Task build and run the app for you. This is nice, because it
+will recompile and run the new application if you change any source files:
+
+```sh
+$ task run
+```
+
 
 ## FAQ
 
