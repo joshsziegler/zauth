@@ -8,6 +8,7 @@ vars:
 output: prefixed
 
 tasks:
+
   default:
     cmds:
       - task: run
@@ -22,6 +23,7 @@ tasks:
     desc: Build the web app as a single binary.
     deps: [css]
     cmds:
+        - goimports -l -w ./
         - packr build -ldflags="-X main.Version={{.VERSION}} -X main.BuildDate={{now | date "2006-01-02T15:04:05Z07:00"}}" -o {{.EXE}} cmd/zauth.go
     vars:
       VERSION:
