@@ -1,14 +1,16 @@
 # zauth
 
-## Build and Run
+Lightweight authentication server, with basic LDAP support, and a web UI.
+
+## Compile
 
 The build process requires:
 
 - Git
 - Go 1.13+
 - MySQL 5.7+
-- Goimports
 - Task
+- Goimports
 - Minify
 - Packr
 
@@ -16,8 +18,8 @@ We will leave installing Go and MySQL to you. Installing Task, Minify, and Packr
 can be done like this:
 
 ```sh
+go get -u github.com/go-task/task/v2/cmd/task
 go get -u golang.org/x/tools/cmd/goimports
-go get -u github.com/go-task/task/cmd/task
 go get -u github.com/tdewolff/minify/cmd/minify
 go get -u github.com/gobuffalo/packr/packr
 ```
@@ -36,7 +38,6 @@ will recompile and run the new application if you change any source files:
 ```sh
 task run
 ```
-
 
 ## FAQ
 
