@@ -46,3 +46,20 @@ task run
 Check your `config.yml` for `production`. If it is set to `true` and you're not
 running via SSL/TLS, the CSRF protection will not work. Change to `false` if
 you're simply developing locally, or make sure it's served behind SSL.
+
+### How can I query and test the LDAP server?
+
+One way is to install `ldapsearch` which is standards compliant. Then you can:
+
+```sh
+# Get info about the user joshz (anonymously)
+$ ldapsearch -x -H ldap://localhost:3389 "uid=joshz"
+# Get info about the group admin (anonymously)
+$ ldapsearch -x -H ldap://localhost:3389 "cn=admin"
+# ldapwhoami currently doesn't work with zauth (BUG), so you can use to login
+$ ldapsearch -x -H ldap://localhost:3389 -W -D 'uid=joshz'
+#
+# Login as joshz (and return all of your info) (currently broken)
+$ ldapwhoami -x -H ldap://localhost:3389 -W -D 'uid=joshz'
+
+```
