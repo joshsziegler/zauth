@@ -9,6 +9,7 @@ import (
 	"github.com/ansel1/merry"
 	"github.com/gorilla/csrf"
 	"github.com/joshsziegler/zauth/models/user"
+	"github.com/joshsziegler/zauth/pkg/log"
 )
 
 type LoginPageData struct {

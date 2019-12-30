@@ -6,6 +6,7 @@ import (
 	"github.com/ansel1/merry"
 	"github.com/jmoiron/sqlx"
 
+	"github.com/joshsziegler/zauth/pkg/log"
 	mPassword "github.com/joshsziegler/zauth/pkg/password"
 )
 

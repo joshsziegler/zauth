@@ -10,14 +10,13 @@ import (
 	"github.com/jmoiron/sqlx"
 
 	"github.com/gobuffalo/packr"
-	logging "github.com/op/go-logging"
 
 	"github.com/joshsziegler/zauth/pkg/httpserver"
+	"github.com/joshsziegler/zauth/pkg/log"
 	"github.com/joshsziegler/zauth/pkg/secrets"
 )
 
 var (
-	log *logging.Logger
 	// DB is our shared database connection (handles connection pooling, and is
 	// goroutine-safe)
 	DB *sqlx.DB
@@ -33,9 +32,7 @@ const (
 )
 
 // Listen performs setup and runs the Web server (blocking)
-func Listen(logger *logging.Logger, database *sqlx.DB, listenTo string,
-	isProduction bool) {
-	log = logger
+func Listen(database *sqlx.DB, listenTo string, isProduction bool) {
 	DB = database
 
 	// Setup sessions using secure cookies

@@ -1,16 +1,12 @@
 package main
 
 import (
-	"fmt"
-	"os"
-
 	"io/ioutil"
 
 	"github.com/ansel1/merry"
 	_ "github.com/go-sql-driver/mysql" // Blank import required for SQL drivers
 	"github.com/go-yaml/yaml"
 	"github.com/jmoiron/sqlx"
-	logging "github.com/op/go-logging"
 
 	"github.com/joshsziegler/zauth/models/httpserver"
 	"github.com/joshsziegler/zauth/models/user"
@@ -18,6 +14,7 @@ import (
 	"github.com/joshsziegler/zauth/pkg/email"
 	"github.com/joshsziegler/zauth/pkg/file"
 	"github.com/joshsziegler/zauth/pkg/ldap"
+	"github.com/joshsziegler/zauth/pkg/log"
 )
 
 const (
@@ -31,7 +28,6 @@ var (
 	BuildDate string
 	// We use a global config, because it should be read-only after initial loading
 	config Config
-	log    = logging.MustGetLogger(programName)
 	// DB is our shared database connection (handles connection pooling, and is
 	// goroutine-safe)
 	DB *sqlx.DB
@@ -67,21 +63,12 @@ func mustLoadConfig() (c Config) {
 	return c
 }
 
-// initLogging sets up logging to stdout
-func initLogging() {
-	logging.SetBackend(logging.NewLogBackend(os.Stdout, "", 0))
-	logging.SetLevel(logging.INFO, programName)
-	format := "%{level:.4s} ▶ %{message}"
-	logging.SetFormatter(logging.MustStringFormatter(format))
-}
-
 func main() {
-	initLogging()
-	log.Info(fmt.Sprintf("%s %s (Built: %s)", programName, Version, BuildDate))
+	log.Infof("%s %s (Built: %s)", programName, Version, BuildDate)
 	config = mustLoadConfig()
-	DB = db.MustConnect(log, config.Database)
-	user.Init(log, DB)
+	DB = db.MustConnect(config.Database)
+	user.Init(DB)
 	email.Init(config.SendGridAPIKey)
-	go httpserver.Listen(log, DB, config.HTTP.ListenTo, config.Production)
-	ldap.Listen(log, DB, config.LDAP) // blocking
+	go httpserver.Listen(DB, config.HTTP.ListenTo, config.Production)
+	ldap.Listen(DB, config.LDAP) // blocking
 }

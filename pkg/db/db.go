@@ -6,7 +6,8 @@ import (
 	"github.com/ansel1/merry"
 	_ "github.com/go-sql-driver/mysql" // Blank import required for SQL drivers
 	"github.com/jmoiron/sqlx"
-	logging "github.com/op/go-logging"
+
+	"github.com/joshsziegler/zauth/pkg/log"
 )
 
 // Config holds the database configuration, required for connecting to and
@@ -30,7 +31,7 @@ type Config struct {
 //		 time.Time instead of []byte / string
 //   - interpolateParams: Reduces the number of round trips required to
 //       interpolate placeholders (i.e. ?)
-func MustConnect(log *logging.Logger, config Config) *sqlx.DB {
+func MustConnect(config Config) *sqlx.DB {
 	config.Address = fmt.Sprintf("tcp(%s)", config.Address)
 	// Create the Data Source Name (DSN), but print a password-masked version
 	dsn_safe := getDSN(config.Username, "*****", config.Address, config.DBName)

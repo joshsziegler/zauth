@@ -8,6 +8,7 @@ import (
 	"github.com/gorilla/csrf"
 
 	"github.com/joshsziegler/zauth/models/user"
+	"github.com/joshsziegler/zauth/pkg/log"
 	"github.com/joshsziegler/zauth/pkg/password"
 )
 

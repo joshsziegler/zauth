@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/joshsziegler/zauth/models/user"
+	"github.com/joshsziegler/zauth/pkg/log"
 )
 
 // Render loads the HTML template 'name' using the provided 'data' struct and

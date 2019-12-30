@@ -9,11 +9,11 @@ import (
 	"github.com/ansel1/merry"
 	"github.com/jmoiron/sqlx"
 	nmLdap "github.com/nmcclain/ldap"
-	logging "github.com/op/go-logging"
 
 	mGroup "github.com/joshsziegler/zauth/models/group"
 	"github.com/joshsziegler/zauth/models/user"
 	"github.com/joshsziegler/zauth/models/user2group"
+	"github.com/joshsziegler/zauth/pkg/log"
 )
 
 // Config is used to pass required configuration options for the LDAP server
@@ -27,14 +27,12 @@ type Config struct {
 var (
 	// We use a global config, because it should be read-only after initial loading
 	config Config
-	log    *logging.Logger
 	// DB is the shared (via connection pooling) database connection; goroutine-safe
 	DB *sqlx.DB
 )
 
 // Listen performs setup and runs the LDAP server (blocking)
-func Listen(logger *logging.Logger, database *sqlx.DB, config Config) {
-	log = logger
+func Listen(database *sqlx.DB, config Config) {
 	DB = database
 	// Create our LDAP-server
 	s := nmLdap.NewServer()
