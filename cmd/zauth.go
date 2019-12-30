@@ -12,6 +12,7 @@ import (
 	"github.com/joshsziegler/zauth/models/user"
 	"github.com/joshsziegler/zauth/pkg/db"
 	"github.com/joshsziegler/zauth/pkg/email"
+	"github.com/joshsziegler/zauth/pkg/environment"
 	"github.com/joshsziegler/zauth/pkg/file"
 	"github.com/joshsziegler/zauth/pkg/ldap"
 	"github.com/joshsziegler/zauth/pkg/log"
@@ -64,6 +65,7 @@ func mustLoadConfig() (c Config) {
 }
 
 func main() {
+	log.Init(environment.Dev) // TODO: Set via config
 	log.Infof("%s %s (Built: %s)", programName, Version, BuildDate)
 	config = mustLoadConfig()
 	DB = db.MustConnect(config.Database)
