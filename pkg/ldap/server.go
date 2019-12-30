@@ -1,4 +1,4 @@
-package ldapserver
+package ldap
 
 import (
 	"fmt"
@@ -8,7 +8,7 @@ import (
 
 	"github.com/ansel1/merry"
 	"github.com/jmoiron/sqlx"
-	"github.com/nmcclain/ldap"
+	nmLdap "github.com/nmcclain/ldap"
 	logging "github.com/op/go-logging"
 
 	mGroup "github.com/joshsziegler/zauth/models/group"
@@ -37,7 +37,7 @@ func Listen(logger *logging.Logger, database *sqlx.DB, config Config) {
 	log = logger
 	DB = database
 	// Create our LDAP-server
-	s := ldap.NewServer()
+	s := nmLdap.NewServer()
 	// Ask the LDAP server to enforce search filter, attribute limits, size/time
 	// limits, search scope, and base DN matching to our handler's returned data
 	s.EnforceLDAP = true
@@ -79,12 +79,12 @@ type mysqlBackend struct {
 //
 // This will NEVER return a user's password hash.
 func (h mysqlBackend) Bind(bindDN, bindPassword string, conn net.Conn) (
-	ldap.LDAPResultCode, error) {
+	nmLdap.LDAPResultCode, error) {
 
 	if bindDN == "" && bindPassword == "" {
 		// Always allow anonymous binds
 		log.Info("LDAP: anonymous bind")
-		return ldap.LDAPResultSuccess, nil
+		return nmLdap.LDAPResultSuccess, nil
 	}
 
 	// User is trying to bind as a particular user, so check their password
@@ -92,12 +92,12 @@ func (h mysqlBackend) Bind(bindDN, bindPassword string, conn net.Conn) (
 	if err != nil {
 		log.Errorf("LDAP: bind failure: could not parse username from %s (%s)",
 			bindDN, err)
-		return ldap.LDAPResultInvalidCredentials, nil
+		return nmLdap.LDAPResultInvalidCredentials, nil
 	}
 	tx, err := DB.Beginx()
 	if err != nil {
 		log.Errorf("LDAP: error starting transaction during Bind: %s", err)
-		return ldap.LDAPResultOperationsError, nil
+		return nmLdap.LDAPResultOperationsError, nil
 	}
 	err = user.Login(tx, username, bindPassword)
 	if err != nil {
@@ -105,40 +105,40 @@ func (h mysqlBackend) Bind(bindDN, bindPassword string, conn net.Conn) (
 		err = tx.Commit()
 		if err != nil {
 			log.Errorf("LDAP: transaction error during Bind: %s", err)
-			return ldap.LDAPResultOperationsError, nil
+			return nmLdap.LDAPResultOperationsError, nil
 		}
-		return ldap.LDAPResultInvalidCredentials, nil
+		return nmLdap.LDAPResultInvalidCredentials, nil
 	}
 	log.Infof("LDAP: bind success as %s", username)
 	err = tx.Commit()
 	if err != nil {
 		log.Errorf("LDAP: transaction error during Bind: %s", err)
-		return ldap.LDAPResultOperationsError, nil
+		return nmLdap.LDAPResultOperationsError, nil
 	}
-	return ldap.LDAPResultSuccess, nil
+	return nmLdap.LDAPResultSuccess, nil
 }
 
 // Search handles a bound client's search request, with LDAP handling the filter
 //
 // TODO: Only respond to our base DN? - JZ
-func (h mysqlBackend) Search(boundDN string, searchReq ldap.SearchRequest,
-	conn net.Conn) (ldap.ServerSearchResult, error) {
+func (h mysqlBackend) Search(boundDN string, searchReq nmLdap.SearchRequest,
+	conn net.Conn) (nmLdap.ServerSearchResult, error) {
 
 	// Get username, assuming there will be no error since they already bound
 	username, _ := getUsernameFromUID(boundDN)
 
-	scope := ldap.ScopeMap[searchReq.Scope]
+	scope := nmLdap.ScopeMap[searchReq.Scope]
 	msg := fmt.Sprintf(
 		`LDAP: Search by: "%s" BaseDN: "%s" Scope: "%s" Filter: "%s" Attributes: %+v`,
 		username, searchReq.BaseDN, scope, searchReq.Filter, searchReq.Attributes)
 	entries, err := h.getAllUsersAndGroups()
 	if err != nil {
 		log.Errorf(`%s FAILED: "%s"`, msg, err)
-		return ldap.ServerSearchResult{ResultCode: ldap.LDAPResultOperationsError}, nil
+		return nmLdap.ServerSearchResult{ResultCode: nmLdap.LDAPResultOperationsError}, nil
 	}
 	log.Info(msg)
-	return ldap.ServerSearchResult{entries, []string{}, []ldap.Control{},
-		ldap.LDAPResultSuccess}, nil
+	return nmLdap.ServerSearchResult{entries, []string{}, []nmLdap.Control{},
+		nmLdap.LDAPResultSuccess}, nil
 }
 
 // Close handles client disconnections
@@ -151,7 +151,7 @@ func (h mysqlBackend) Close(boundDN string, conn net.Conn) error {
 // Returns all users and groups in the database as LDAP entries.
 //
 // This is meant to be passed to the LDAP library for filtering as needed.
-func (h mysqlBackend) getAllUsersAndGroups() (entries []*ldap.Entry, err error) {
+func (h mysqlBackend) getAllUsersAndGroups() (entries []*nmLdap.Entry, err error) {
 	tx, err := DB.Beginx()
 	if err != nil {
 		err = merry.Append(err, "error starting transaction")
@@ -179,10 +179,10 @@ func (h mysqlBackend) getAllUsersAndGroups() (entries []*ldap.Entry, err error) 
 	return
 }
 
-func userToLDAPEntry(u *user.User) *ldap.Entry {
-	return &ldap.Entry{"uid=" + u.Username + "," + config.UserOU +
+func userToLDAPEntry(u *user.User) *nmLdap.Entry {
+	return &nmLdap.Entry{"uid=" + u.Username + "," + config.UserOU +
 		config.BaseDN,
-		[]*ldap.EntryAttribute{
+		[]*nmLdap.EntryAttribute{
 			{"uid", []string{u.Username}},
 			{"cn", []string{u.CommonName()}},
 			{"sn", []string{u.LastName}},
@@ -198,10 +198,10 @@ func userToLDAPEntry(u *user.User) *ldap.Entry {
 		}}
 }
 
-func groupToLDAPEntry(g *mGroup.Group) *ldap.Entry {
-	return &ldap.Entry{"cn=" + g.Name + "," + config.GroupOU +
+func groupToLDAPEntry(g *mGroup.Group) *nmLdap.Entry {
+	return &nmLdap.Entry{"cn=" + g.Name + "," + config.GroupOU +
 		config.BaseDN,
-		[]*ldap.EntryAttribute{
+		[]*nmLdap.EntryAttribute{
 			{"cn", []string{g.Name}},
 			{"gidNumber", []string{strconv.FormatInt(g.UnixGroupID(), 10)}},
 			{"description", []string{g.Description}},

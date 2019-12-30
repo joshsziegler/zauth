@@ -13,11 +13,11 @@ import (
 	logging "github.com/op/go-logging"
 
 	"github.com/joshsziegler/zauth/models/httpserver"
-	"github.com/joshsziegler/zauth/models/ldapserver"
 	"github.com/joshsziegler/zauth/models/user"
 	"github.com/joshsziegler/zauth/pkg/db"
 	"github.com/joshsziegler/zauth/pkg/email"
 	"github.com/joshsziegler/zauth/pkg/file"
+	"github.com/joshsziegler/zauth/pkg/ldap"
 )
 
 const (
@@ -45,7 +45,7 @@ type httpConfig struct {
 type Config struct {
 	Production     bool
 	Database       db.Config
-	LDAP           ldapserver.Config
+	LDAP           ldap.Config
 	HTTP           httpConfig
 	SendGridAPIKey string
 }
@@ -83,5 +83,5 @@ func main() {
 	user.Init(log, DB)
 	email.Init(config.SendGridAPIKey)
 	go httpserver.Listen(log, DB, config.HTTP.ListenTo, config.Production)
-	ldapserver.Listen(log, DB, config.LDAP) // blocking
+	ldap.Listen(log, DB, config.LDAP) // blocking
 }
