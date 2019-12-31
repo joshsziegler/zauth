@@ -52,25 +52,29 @@ func Init(environment int) {
 
 var env int
 
-// Info logs a normal, informative message. For information that should not be
-// logged in production, used Debug() instead.
+// Info logs a normal, informative message if not in testing. For information 
+// that should not be logged in production, used Debug() instead.
 func Info(args ...interface{}) {
-	log.Print("I: " + fmt.Sprint(args...))
+	if env != e.Test {
+		log.Print("I: " + fmt.Sprint(args...))
+	}
 }
 
 func Infof(format string, args ...interface{}) {
-	log.Print("I: " + fmt.Sprintf(format, args...))
+	if env != e.Test {
+		log.Print("I: " + fmt.Sprintf(format, args...))
+	}
 }
 
-// Debug logs a message that should only be shown in development or testing.
+// Debug logs a message that should only be shown only in development.
 func Debug(args ...interface{}) {
-	if env != e.Prod {
+	if env == e.Dev {
 		log.Print("D: " + fmt.Sprint(args...))
 	}
 }
 
 func Debugf(format string, args ...interface{}) {
-	if env != e.Prod {
+	if env != e.Dev {
 		log.Print("D: " + fmt.Sprintf(format, args...))
 	}
 }

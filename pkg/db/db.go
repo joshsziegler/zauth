@@ -2,6 +2,7 @@ package db
 
 import (
 	"fmt"
+	"testing"
 
 	"github.com/ansel1/merry"
 	_ "github.com/go-sql-driver/mysql" // Blank import required for SQL drivers
@@ -57,3 +58,16 @@ func getDSN(username, password, address, dbName string) string {
 		"parseTime=true&",
 		"interpolateParams=true")
 }
+
+// GetTxOrFailTesting creates and returns a database transaction, or will end 
+// the unit test by calling t.Fatal()
+func GetTxOrFailTesting(t *testing.T, db *sqlx.DB) *sqlx.Tx {
+	tx, err := db.Beginx()
+	if err != nil {
+		log.Fatalf("error creating DB transaction: %v", err)
+		return nil
+	}
+	return tx
+}
+
+
