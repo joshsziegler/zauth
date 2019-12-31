@@ -11,6 +11,7 @@ import (
 	"github.com/gorilla/csrf"
 	mUser "github.com/joshsziegler/zauth/models/user"
 	"github.com/joshsziegler/zauth/pkg/email"
+	"github.com/joshsziegler/zauth/pkg/log"
 )
 
 type formNewUser struct {
@@ -78,7 +79,7 @@ func NewUserPost(c *Context, w http.ResponseWriter, r *http.Request) error {
 		hours.</p>`)
 	if err != nil {
 		// User was created successfully, but the password email failed
-		msg := fmt.Sprintf("User %s successfully created, but their password reset email failed to send. %s",
+		msg := fmt.Sprintf("User %s successfully created, but their password reset email failed to send. <code>%s</code>",
 			newUser.Username, err)
 		c.AddNormalFlash(msg)
 		return err

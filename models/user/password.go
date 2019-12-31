@@ -58,6 +58,11 @@ func SetUserPassword(tx *sqlx.Tx, username string, password string) error {
 	return nil
 }
 
+type passwordResetHelper struct {
+	Tx   *sqlx.Tx
+	User *User
+}
+
 // Returns the concatenated password hash and password set time, for token-based
 // password resets. This has been factored out to reduce the chance for errors
 // when creating and checking password reset tokens.
@@ -90,10 +95,10 @@ func (u *User) GetPasswordResetValue() []byte {
 //
 // This queries the database, to avoid overhead. Use
 // User.GetPasswordResetValue() if you already have the user in memory.
-func GetPasswordResetValue(username string) (resetValue []byte, err error) {
+func (h *passwordResetHelper) GetPasswordResetValue(username string) (resetValue []byte, err error) {
 	var passwordHash string
 	var passwordSet time.Time
-	err = db.QueryRowx(`SELECT PasswordHash, PasswordSet 
+	err = h.Tx.QueryRowx(`SELECT PasswordHash, PasswordSet 
 						FROM Users 
 						WHERE Username=?`,
 		username).Scan(&passwordHash, &passwordSet)
@@ -118,9 +123,10 @@ func (u *User) GetPasswordResetToken(hours int64) string {
 
 // ValidatePasswordResetToken returns the username this password reset token
 // belongs to if and only if it is valid. Otherwise it will return an error.
-func ValidatePasswordResetToken(token string) (username string, err error) {
-	username, err = passwordreset.VerifyToken(token, GetPasswordResetValue,
-		secrets.PasswordResetSecret())
+func ValidatePasswordResetToken(tx *sqlx.Tx, token string) (username string, err error) {
+	helper := passwordResetHelper{Tx: tx, User: nil}
+	username, err = passwordreset.VerifyToken(token,
+		helper.GetPasswordResetValue, secrets.PasswordResetSecret())
 	if err != nil {
 		// Token verification failed, don't allow password reset
 		return "", err

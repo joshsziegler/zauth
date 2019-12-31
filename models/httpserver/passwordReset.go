@@ -30,7 +30,7 @@ func PasswordResetGetPost(c *Context, w http.ResponseWriter, r *http.Request) er
 	// Get the token from the URL
 	token := c.GetRouteVarTrim("token")
 	// Validate the password reset token
-	requestedUsername, err := user.ValidatePasswordResetToken(token)
+	requestedUsername, err := user.ValidatePasswordResetToken(c.Tx, token)
 	if err != nil {
 		// Invalid token - Set flash message and redirect to our login page
 		log.Errorf("invalid password reset token: %s", err)

@@ -3,9 +3,11 @@ module github.com/joshsziegler/zauth
 go 1.12
 
 require (
+	9fans.net/go v0.0.2 // indirect
 	github.com/Masterminds/goutils v1.1.0 // indirect
 	github.com/Masterminds/semver v1.5.0 // indirect
 	github.com/Masterminds/sprig v2.22.0+incompatible // indirect
+	github.com/alvarolm/GoGuru v0.0.0-20191127235554-9fa172b4c954 // indirect
 	github.com/ansel1/merry v1.5.0
 	github.com/aokoli/goutils v1.1.0 // indirect
 	github.com/badoux/checkmail v0.0.0-20181210160741-9661bd69e9ad
@@ -35,15 +37,18 @@ require (
 	github.com/mitchellh/reflectwalk v1.0.1 // indirect
 	github.com/nmcclain/asn1-ber v0.0.0-20170104154839-2661553a0484 // indirect
 	github.com/nmcclain/ldap v0.0.0-20191021200707-3b3b69a7e9e3
+	github.com/nsf/gocode v0.0.0-20190302080247-5bee97b48836 // indirect
 	github.com/pkg/errors v0.8.1 // indirect
 	github.com/radovskyb/watcher v1.0.7 // indirect
 	github.com/rogpeppe/go-internal v1.5.1 // indirect
+	github.com/rogpeppe/godef v1.1.1 // indirect
 	github.com/sendgrid/rest v2.4.1+incompatible // indirect
 	github.com/sendgrid/sendgrid-go v3.5.0+incompatible
 	github.com/spf13/pflag v1.0.5 // indirect
 	github.com/tdewolff/minify v2.3.6+incompatible // indirect
 	github.com/tdewolff/parse v2.3.4+incompatible // indirect
 	golang.org/x/crypto v0.0.0-20191227163750-53104e6ec876
+	golang.org/x/lint v0.0.0-20191125180803-fdd1cda4f05f // indirect
 	golang.org/x/sys v0.0.0-20191228213918-04cbcbbfeed8 // indirect
 	golang.org/x/tools v0.0.0-20191230220329-2aa90c603ae3 // indirect
 	golang.org/x/xerrors v0.0.0-20191204190536-9bdfabe68543 // indirect

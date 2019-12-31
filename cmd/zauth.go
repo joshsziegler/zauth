@@ -9,7 +9,6 @@ import (
 	"github.com/jmoiron/sqlx"
 
 	"github.com/joshsziegler/zauth/models/httpserver"
-	"github.com/joshsziegler/zauth/models/user"
 	"github.com/joshsziegler/zauth/pkg/db"
 	"github.com/joshsziegler/zauth/pkg/email"
 	"github.com/joshsziegler/zauth/pkg/environment"
@@ -69,7 +68,6 @@ func main() {
 	log.Infof("%s %s (Built: %s)", programName, Version, BuildDate)
 	config = mustLoadConfig()
 	DB = db.MustConnect(config.Database)
-	user.Init(DB)
 	email.Init(config.SendGridAPIKey)
 	go httpserver.Listen(DB, config.HTTP.ListenTo, config.Production)
 	ldap.Listen(DB, config.LDAP) // blocking

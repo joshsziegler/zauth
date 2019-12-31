@@ -5,3 +5,6 @@ secrets.json
 public/style.css
 # Vim swap files
 *.swp
+# Sublime
+*.sublime-project
+*.sublime-workspace
