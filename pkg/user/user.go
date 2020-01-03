@@ -28,7 +28,7 @@ var (
 // User represents an LDAP user's attributes and group membership
 //
 // Assumptions:
-//   - Once created, a user's username and ID will NEVER change.
+//   - Database IDs, and Usernames MUST be unique, and will NEVER change.
 //   - Only admins can create new users, change groups, and enable/disable users
 //   - Enabled means that user can perform LDAP BIND operations. Disabled users
 //     can still login to this website to see and change their info however.

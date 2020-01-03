@@ -5,7 +5,7 @@ import (
 	"net/http"
 
 	"github.com/ansel1/merry"
-	"github.com/joshsziegler/zauth/models/user2group"
+	"github.com/joshsziegler/zauth/pkg/user"
 )
 
 // userAddRemoveGroups is a sub-handler that handles adding or removing a single
@@ -25,10 +25,10 @@ func userAddRemoveGroups(c *Context, w http.ResponseWriter, r *http.Request) err
 	operation := c.GetRouteVarTrim("addOrRemove")
 	if operation == "add" {
 		flash = fmt.Sprintf("Adding user %s to group %s ", requestedUsername, group)
-		err = user2group.AddUserToGroup(c.Tx, requestedUsername, group)
+		err = user.AddUserToGroup(c.Tx, requestedUsername, group)
 	} else if operation == "remove" {
 		flash = fmt.Sprintf("Removing user %s from group %s ", requestedUsername, group)
-		err = user2group.RemoveUserFromGroup(c.Tx, requestedUsername, group)
+		err = user.RemoveUserFromGroup(c.Tx, requestedUsername, group)
 	} else {
 		return merry.Here(ErrRequestArgument).
 			WithMessagef("invalid operation '%s' (must be 'add' or 'remove')",

@@ -7,7 +7,7 @@ import (
 	"github.com/jmoiron/sqlx"
 
 	"github.com/joshsziegler/zauth/pkg/log"
-	mPassword "github.com/joshsziegler/zauth/pkg/password"
+	pw "github.com/joshsziegler/zauth/pkg/password"
 )
 
 // Login returns nil IFF the account is not disabled AND the password is correct
@@ -26,7 +26,7 @@ func Login(tx *sqlx.Tx, username string, password string) (err error) {
 		return ErrorLoginDisabled.Here().WithMessagef("user '%s' is disabled", username)
 	}
 
-	valid, insecure, err := mPassword.Valid(password, correctPasswordHash)
+	valid, insecure, err := pw.Valid(password, correctPasswordHash)
 	if err != nil {
 		return merry.Wrap(err)
 	}

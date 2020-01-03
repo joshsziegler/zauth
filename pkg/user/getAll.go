@@ -1,30 +1,27 @@
-package user2group
+package user
 
 import (
 	"github.com/ansel1/merry"
 	_ "github.com/go-sql-driver/mysql" // Blank import required for SQL drivers
 	"github.com/jmoiron/sqlx"
-
-	mGroup "github.com/joshsziegler/zauth/models/group"
-	mUser "github.com/joshsziegler/zauth/models/user"
 )
 
-// GetAll Users and Groups, WITH membership info populated.
+// GetAllUsersAndGroups Users and Groups, WITH membership info populated.
 //
 // This exists because it *should* be more efficient for populating group
 // membership info IF AND ONLY IF you need all or most of the users and groups.
-func GetAll(tx *sqlx.Tx) (users map[int64]*(mUser.User),
-	groups map[int64]*(mGroup.Group), err error) {
+func GetAllUsersAndGroups(tx *sqlx.Tx) (users map[int64]*(User),
+	groups map[int64]*(Group), err error) {
 
 	// Get all Users (does NOT pull group membership)
-	users, err = mUser.GetUsersMapWithoutGroups(tx)
+	users, err = GetUsersMapWithoutGroups(tx)
 	if err != nil {
 		err = merry.Append(err, "error getting users")
 		return
 	}
 
 	// Get all Groups (does NOT pull members)
-	groups, err = mGroup.GetGroupsMapWithoutUsers(tx)
+	groups, err = GetGroupsMapWithoutUsers(tx)
 	if err != nil {
 		err = merry.Append(err, "error getting groups")
 		return

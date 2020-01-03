@@ -5,19 +5,18 @@ import (
 
 	"github.com/ansel1/merry"
 
-	mUser "github.com/joshsziegler/zauth/models/user"
-	"github.com/joshsziegler/zauth/models/user2group"
+	"github.com/joshsziegler/zauth/pkg/user"
 )
 
 type userDetailData struct {
 	Message string
 	Error   string
 	// RequestingUser is the one who asked for this page.
-	RequestingUser mUser.User
+	RequestingUser user.User
 	// RequestedUser is the User they want to view on this page.
-	RequestedUser mUser.User
+	RequestedUser user.User
 	// GroupMembership holds all Groups, and whether RequestedUser is a member.
-	GroupMembership []user2group.Group
+	GroupMembership []user.GroupMembership
 }
 
 // UserDetailGet is a sub-handler that shows the details for a specific user.
@@ -37,7 +36,7 @@ func UserDetailGet(c *Context, w http.ResponseWriter, r *http.Request) error {
 		return merry.Wrap(err)
 	}
 	// Get RequestedUser's group membership matrix
-	groupMembership, err := user2group.GetUsersMembership(c.Tx, requestedUser.ID)
+	groupMembership, err := user.GetUsersMembership(c.Tx, requestedUser.ID)
 	if err != nil {
 		return merry.Wrap(err)
 	}

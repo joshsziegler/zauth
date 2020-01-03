@@ -6,18 +6,17 @@ import (
 
 	"github.com/ansel1/merry"
 	"github.com/gorilla/csrf"
-	"github.com/joshsziegler/zauth/models/user"
-	mUser "github.com/joshsziegler/zauth/models/user"
 	"github.com/joshsziegler/zauth/pkg/password"
+	"github.com/joshsziegler/zauth/pkg/user"
 )
 
 type userSetPasswordPageData struct {
 	Message string
 	Error   string
 	// RequestingUser is the one who asked for this page.
-	RequestingUser mUser.User
+	RequestingUser user.User
 	// RequestedUser is the User they want to view on this page.
-	RequestedUser     mUser.User
+	RequestedUser     user.User
 	CSRFField         template.HTML
 	PasswordMinLength int
 	PasswordMaxLength int

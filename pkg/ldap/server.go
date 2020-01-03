@@ -10,10 +10,8 @@ import (
 	"github.com/jmoiron/sqlx"
 	nmLdap "github.com/nmcclain/ldap"
 
-	mGroup "github.com/joshsziegler/zauth/models/group"
-	"github.com/joshsziegler/zauth/models/user"
-	"github.com/joshsziegler/zauth/models/user2group"
 	"github.com/joshsziegler/zauth/pkg/log"
+	"github.com/joshsziegler/zauth/pkg/user"
 )
 
 // Config is used to pass required configuration options for the LDAP server
@@ -155,7 +153,7 @@ func (h mysqlBackend) getAllUsersAndGroups() (entries []*nmLdap.Entry, err error
 		err = merry.Append(err, "error starting transaction")
 		return
 	}
-	users, groups, err := user2group.GetAll(tx)
+	users, groups, err := user.GetAllUsersAndGroups(tx)
 	if err != nil {
 		_ = tx.Commit() // ignore error if we're responding to an error
 		if err != nil {
@@ -196,7 +194,7 @@ func userToLDAPEntry(u *user.User) *nmLdap.Entry {
 		}}
 }
 
-func groupToLDAPEntry(g *mGroup.Group) *nmLdap.Entry {
+func groupToLDAPEntry(g *user.Group) *nmLdap.Entry {
 	return &nmLdap.Entry{"cn=" + g.Name + "," + config.GroupOU +
 		config.BaseDN,
 		[]*nmLdap.EntryAttribute{

@@ -1,4 +1,4 @@
-package user2group
+package user
 
 import (
 	"github.com/ansel1/merry"

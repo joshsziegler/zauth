@@ -1,4 +1,4 @@
-package group
+package user
 
 import (
 	"database/sql"
@@ -83,7 +83,7 @@ func GetGroupsMapWithoutUsers(tx *sqlx.Tx) (groups map[int64]*(Group), err error
 // Add inserts a new group into the database.
 //
 // TODO: Add name validity checks? - JZ
-func Add(tx *sqlx.Tx, name string, description string) error {
+func AddGroup(tx *sqlx.Tx, name string, description string) error {
 	_, err := tx.Exec("INSERT INTO Groups (Name, Description) VALUES (?,?);",
 		name, description)
 	if err != nil {
@@ -98,7 +98,7 @@ func Add(tx *sqlx.Tx, name string, description string) error {
 	return nil
 }
 
-func Delete(tx *sql.Tx, name string) error {
+func DeleteGroup(tx *sql.Tx, name string) error {
 	_, err := tx.Exec("DELETE FROM Groups WHERE Name IS ?;", name)
 	if err != nil {
 		return merry.Wrap(err)

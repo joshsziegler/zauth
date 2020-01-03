@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/joshsziegler/zauth/models/user"
 	"github.com/joshsziegler/zauth/pkg/log"
+	"github.com/joshsziegler/zauth/pkg/user"
 )
 
 // Render loads the HTML template 'name' using the provided 'data' struct and

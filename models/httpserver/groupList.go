@@ -3,15 +3,14 @@ package httpserver
 import (
 	"net/http"
 
-	mGroup "github.com/joshsziegler/zauth/models/group"
-	mUser "github.com/joshsziegler/zauth/models/user"
+	"github.com/joshsziegler/zauth/pkg/user"
 )
 
 type groupListData struct {
 	Message string
 	Error   string
-	User    mUser.User
-	Groups  []*mGroup.Group
+	User    user.User
+	Groups  []*user.Group
 }
 
 // GroupListGet shows the user a list of all current zauth groups.
@@ -21,7 +20,7 @@ func GroupListGet(c *Context, w http.ResponseWriter, r *http.Request) error {
 		return ErrPermissionDenied.Here()
 	}
 
-	groups, err := mGroup.GetGroupsSliceWithoutUsers(c.Tx)
+	groups, err := user.GetGroupsSliceWithoutUsers(c.Tx)
 	if err != nil {
 		return err
 		// return ErrInternal.Here()

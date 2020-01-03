@@ -8,8 +8,7 @@ import (
 
 	"github.com/ansel1/merry"
 	"github.com/gorilla/csrf"
-	mGroup "github.com/joshsziegler/zauth/models/group"
-	mUser "github.com/joshsziegler/zauth/models/user"
+	"github.com/joshsziegler/zauth/pkg/user"
 )
 
 type formNewGroup struct {
@@ -18,7 +17,7 @@ type formNewGroup struct {
 }
 
 type newGroupPageData struct {
-	User         *mUser.User
+	User         *user.User
 	ErrorMessage string
 	Form         formNewGroup
 	CSRFField    template.HTML
@@ -52,7 +51,7 @@ func NewGroupPost(c *Context, w http.ResponseWriter, r *http.Request) error {
 	// Handle the request
 	data := newGroupPageData{User: c.User, CSRFField: csrf.TemplateField(r)}
 	form := newFormNewGroup(r)
-	err := mGroup.Add(c.Tx, form.Name, form.Description)
+	err := user.AddGroup(c.Tx, form.Name, form.Description)
 	if err != nil {
 		data.Form = form // Show current form values along with error
 		//data.ErrorMessage = merry.UserMessage(err)

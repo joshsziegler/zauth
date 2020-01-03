@@ -5,7 +5,7 @@ import (
 	"net/http"
 
 	"github.com/ansel1/merry"
-	mUser "github.com/joshsziegler/zauth/models/user"
+	"github.com/joshsziegler/zauth/pkg/user"
 )
 
 // userSetEnabled is a sub-handler that handles enabling or disabling a User
@@ -19,9 +19,9 @@ func userSetEnabled(c *Context, w http.ResponseWriter, r *http.Request) (err err
 	// Handle the request
 	operation := c.GetRouteVarTrim("isEnabled")
 	if operation == "enable" {
-		err = mUser.UserEnable(c.Tx, requestedUsername)
+		err = user.UserEnable(c.Tx, requestedUsername)
 	} else if operation == "disable" {
-		err = mUser.UserDisable(c.Tx, requestedUsername)
+		err = user.UserDisable(c.Tx, requestedUsername)
 	} else {
 		return merry.Here(ErrRequestArgument).
 			WithMessagef("invalid operation '%s' (must be 'enable' or 'disable')",

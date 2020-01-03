@@ -1,4 +1,4 @@
-package user2group
+package user
 
 import (
 	"github.com/ansel1/merry"
@@ -6,15 +6,16 @@ import (
 	"github.com/jmoiron/sqlx"
 )
 
-// Group indicates the name and whether the User is a member or not.
-type Group struct {
+// GroupMembership indicates the name and whether the User is a member or not.
+type GroupMembership struct {
 	Name   string `db:"Name"`
 	Member bool   `db:"Member"`
 }
 
 // GetUsersMembership takes a User ID, and returns a slice of Groups, indicating
 // whether that User is a member or not.
-func GetUsersMembership(tx *sqlx.Tx, userID int64) (groups []Group, err error) {
+func GetUsersMembership(tx *sqlx.Tx, userID int64) (groups []GroupMembership,
+	err error) {
 	// This query uses a sub-select which returns True if the User is in the
 	// Group, and False if not using COUNT(*)=1
 	err = tx.Select(&groups, `SELECT Groups.Name AS Name,

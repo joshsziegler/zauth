@@ -9,9 +9,8 @@ import (
 
 	"github.com/ansel1/merry"
 	"github.com/gorilla/csrf"
-	mUser "github.com/joshsziegler/zauth/models/user"
 	"github.com/joshsziegler/zauth/pkg/email"
-	"github.com/joshsziegler/zauth/pkg/log"
+	"github.com/joshsziegler/zauth/pkg/user"
 )
 
 type formNewUser struct {
@@ -21,7 +20,7 @@ type formNewUser struct {
 }
 
 type newUserPageData struct {
-	User         *mUser.User
+	User         *user.User
 	ErrorMessage string
 	Form         formNewUser
 	CSRFField    template.HTML
@@ -56,7 +55,7 @@ func NewUserPost(c *Context, w http.ResponseWriter, r *http.Request) error {
 	// Handle the request
 	data := newUserPageData{User: c.User, CSRFField: csrf.TemplateField(r)}
 	form := newFormNewUser(r)
-	newUser, err := mUser.NewUser(c.Tx, form.FirstName, form.LastName, form.Email)
+	newUser, err := user.NewUser(c.Tx, form.FirstName, form.LastName, form.Email)
 	if err != nil {
 		data.Form = form // Show current form values along with error
 		data.ErrorMessage = merry.UserMessage(err)
