@@ -60,12 +60,23 @@ func NewUserPost(c *Context, w http.ResponseWriter, r *http.Request) error {
 		data.Form = form // Show current form values along with error
 		data.ErrorMessage = merry.UserMessage(err)
 		Render(w, "user_new.html", data)
+		// Don't return the error, since we rendered a custom error page
 		return nil
+	}
+	// Commit here, so that errors further along should not undo this new user
+	// operation (e.g. from the Email process)
+	// TODO: We don't use the next Tx, but we need it for the wrapper. So what
+	//       should we do? -JZ
+	c.Tx.Commit()
+	c.Tx, err = DB.Beginx()
+	if err != nil {
+		return err
 	}
 
 	// Send new user an email asking them to login and set their password
 	// TODO: Allow this email to be configured? - JZ
-	resetLink := newUser.GetPasswordResetToken(8) // TODO: Set expiration via config?
+	// TODO: Set expiration time via config? - JZ
+	resetLink := newUser.GetPasswordResetToken(8)
 	err = email.Send("MindModeling", "no-reply@mindmodeling.org",
 		newUser.CommonName(), newUser.Email,
 		"Your New MindModeling Account",
@@ -78,10 +89,11 @@ func NewUserPost(c *Context, w http.ResponseWriter, r *http.Request) error {
 		hours.</p>`)
 	if err != nil {
 		// User was created successfully, but the password email failed
-		msg := fmt.Sprintf("User %s successfully created, but their password reset email failed to send. <code>%s</code>",
+		msg := fmt.Sprintf("User %s successfully created, but their password reset email failed to send. '%s'",
 			newUser.Username, err)
 		c.AddNormalFlash(msg)
-		return err
+		http.Redirect(w, r, "/users/"+newUser.Username, 302)
+		return nil
 	}
 	// New User created successfully, redirect them to its page
 	msg := fmt.Sprintf("User %s successfully created. They were sent an email to set their password.",
