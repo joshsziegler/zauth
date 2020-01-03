@@ -1,4 +1,4 @@
-package httpserver
+package http
 
 import (
 	"html/template"
@@ -11,15 +11,15 @@ import (
 
 	"github.com/gobuffalo/packr"
 
-	"github.com/joshsziegler/zauth/pkg/httpserver"
+	"github.com/joshsziegler/zauth/pkg/http/internal"
 	"github.com/joshsziegler/zauth/pkg/log"
 	"github.com/joshsziegler/zauth/pkg/secrets"
 )
 
 var (
-	// DB is our shared database connection (handles connection pooling, and is
+	// db is our shared database connection (handles connection pooling, and is
 	// goroutine-safe)
-	DB *sqlx.DB
+	db *sqlx.DB
 	// secure session store
 	store *sessions.CookieStore
 	// templates holds our loaded Go/HTML templates
@@ -33,7 +33,7 @@ const (
 
 // Listen performs setup and runs the Web server (blocking)
 func Listen(database *sqlx.DB, listenTo string, isProduction bool) {
-	DB = database
+	db = database
 
 	// Setup sessions using secure cookies
 	store = sessions.NewCookieStore(secrets.AuthKey(), secrets.EncryptionKey())

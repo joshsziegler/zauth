@@ -8,11 +8,11 @@ import (
 	"github.com/go-yaml/yaml"
 	"github.com/jmoiron/sqlx"
 
-	"github.com/joshsziegler/zauth/models/httpserver"
 	"github.com/joshsziegler/zauth/pkg/db"
 	"github.com/joshsziegler/zauth/pkg/email"
 	"github.com/joshsziegler/zauth/pkg/environment"
 	"github.com/joshsziegler/zauth/pkg/file"
+	"github.com/joshsziegler/zauth/pkg/http"
 	"github.com/joshsziegler/zauth/pkg/ldap"
 	"github.com/joshsziegler/zauth/pkg/log"
 )
@@ -69,6 +69,6 @@ func main() {
 	config = mustLoadConfig()
 	DB = db.MustConnect(config.Database)
 	email.Init(config.SendGridAPIKey)
-	go httpserver.Listen(DB, config.HTTP.ListenTo, config.Production)
+	go http.Listen(DB, config.HTTP.ListenTo, config.Production)
 	ldap.Listen(DB, config.LDAP) // blocking
 }

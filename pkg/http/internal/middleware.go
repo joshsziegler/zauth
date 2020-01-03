@@ -100,7 +100,7 @@ func Wrap(router *mux.Router, subHandler Handler, requireLogin bool) http.Handle
 			Request:        r,
 		}
 		// Create a DB transaction for our context struct
-		tx, err := DB.Beginx()
+		tx, err := db.Beginx()
 		if err != nil {
 			Error(w, 500, "Error",
 				"Sorry, but the server encountered an error.", nil)
