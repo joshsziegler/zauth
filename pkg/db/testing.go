@@ -29,7 +29,7 @@ func GetTxOrFailTesting(t *testing.T, db *sqlx.DB) *sqlx.Tx {
 }
 
 // SetupTestingDatabase creates and returns an empty database, using the the
-// database name foo_test, where 'foo' is the name in the config.
+// database name `foo_test`, where `foo` is the name in the config.
 func SetupTestingDatabase(t *testing.T, config Config, scriptPath string) *sqlx.DB {
 	// 1. Use the default database name but add _test to avoid overwriting data
 	config.DBName += "_test"
