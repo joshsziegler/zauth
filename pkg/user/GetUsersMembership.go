@@ -18,12 +18,12 @@ func GetUsersMembership(tx *sqlx.Tx, userID int64) (groups []GroupMembership,
 	err error) {
 	// This query uses a sub-select which returns True if the User is in the
 	// Group, and False if not using COUNT(*)=1
-	err = tx.Select(&groups, `SELECT Groups.Name AS Name,
+	err = tx.Select(&groups, `SELECT UserGroups.Name AS Name,
 							       (SELECT COUNT(*)=1
 							        FROM User2Group
-							        WHERE User2Group.GroupID=Groups.ID
+							        WHERE User2Group.GroupID=UserGroups.ID
 							            AND User2Group.UserID=?) AS Member
-							FROM Groups;`, userID)
+							FROM UserGroups;`, userID)
 	if err != nil {
 		err = merry.Wrap(err)
 		return

@@ -129,12 +129,12 @@ func GetUserWithGroups(tx *sqlx.Tx, username string) (user User, err error) {
 		return User{}, merry.Wrap(err)
 	}
 	// Get the name of each group this user belongs to
-	rows, err := tx.Queryx(`SELECT Groups.Name
-							FROM Groups
+	rows, err := tx.Queryx(`SELECT UserGroups.Name
+							FROM UserGroups
 							INNER JOIN User2Group
-								ON Groups.ID=User2Group.GroupID
+								ON UserGroups.ID=User2Group.GroupID
 							WHERE User2Group.UserID=?
-							ORDER BY Groups.Name ASC;`, user.ID)
+							ORDER BY UserGroups.Name ASC;`, user.ID)
 	if err != nil {
 		return User{}, merry.Wrap(err)
 	}
@@ -178,13 +178,13 @@ func (u *User) GetGroupsNotMemberOf(tx *sqlx.Tx) (groups []string, err error) {
 	// If they aren't in any groups, the other query will fail
 	if len(u.Groups) < 1 {
 		rows, err = tx.Queryx(`SELECT Name
-								FROM Groups
+								FROM UserGroups
 								ORDER BY Name ASC;`)
 
 	} else {
 		// Create a query with an arbitrary number of params using sqlx.In()
 		query, qArgs, err := sqlx.In(`SELECT Name
-									  FROM Groups
+									  FROM UserGroups
 									  WHERE Name NOT IN(?)
 									  ORDER BY Name ASC;`, u.Groups)
 		if err != nil {

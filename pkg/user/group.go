@@ -48,7 +48,7 @@ func (g Group) UnixGroupID() int64 {
 }
 
 func GetGroupsSliceWithoutUsers(tx *sqlx.Tx) (groups []*Group, err error) {
-	err = tx.Select(&groups, "SELECT ID, Name, Description FROM Groups ORDER BY Name ASC")
+	err = tx.Select(&groups, "SELECT ID, Name, Description FROM UserGroups ORDER BY Name ASC")
 	if err != nil {
 		err = merry.WithMessage(err, "error retrieving groups list from database")
 		return
@@ -63,7 +63,7 @@ func GetGroupsSliceWithoutUsers(tx *sqlx.Tx) (groups []*Group, err error) {
 // as this will likely be more efficient.
 func GetGroupsMapWithoutUsers(tx *sqlx.Tx) (groups map[int64]*(Group), err error) {
 	groups = make(map[int64]*(Group))
-	rows, err := tx.Queryx("SELECT * FROM Groups")
+	rows, err := tx.Queryx("SELECT * FROM UserGroups")
 	if err != nil {
 		return nil, err
 	}
@@ -84,7 +84,7 @@ func GetGroupsMapWithoutUsers(tx *sqlx.Tx) (groups map[int64]*(Group), err error
 //
 // TODO: Add name validity checks? - JZ
 func AddGroup(tx *sqlx.Tx, name string, description string) error {
-	_, err := tx.Exec("INSERT INTO Groups (Name, Description) VALUES (?,?);",
+	_, err := tx.Exec("INSERT INTO UserGroups (Name, Description) VALUES (?,?);",
 		name, description)
 	if err != nil {
 		sqlError, ok := err.(*mysql.MySQLError)
@@ -99,7 +99,7 @@ func AddGroup(tx *sqlx.Tx, name string, description string) error {
 }
 
 func DeleteGroup(tx *sql.Tx, name string) error {
-	_, err := tx.Exec("DELETE FROM Groups WHERE Name IS ?;", name)
+	_, err := tx.Exec("DELETE FROM UserGroups WHERE Name IS ?;", name)
 	if err != nil {
 		return merry.Wrap(err)
 	}

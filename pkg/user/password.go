@@ -98,8 +98,8 @@ func (u *User) GetPasswordResetValue() []byte {
 func (h *passwordResetHelper) GetPasswordResetValue(username string) (resetValue []byte, err error) {
 	var passwordHash string
 	var passwordSet time.Time
-	err = h.Tx.QueryRowx(`SELECT PasswordHash, PasswordSet 
-						FROM Users 
+	err = h.Tx.QueryRowx(`SELECT PasswordHash, PasswordSet
+						FROM Users
 						WHERE Username=?`,
 		username).Scan(&passwordHash, &passwordSet)
 	if err != nil {
