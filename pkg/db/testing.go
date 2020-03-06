@@ -14,7 +14,7 @@ import (
 	"testing"
 
 	"github.com/jmoiron/sqlx"
-	"github.com/joshsziegler/zauth/pkg/log"
+	"github.com/joshsziegler/zgo/pkg/log"
 )
 
 // GetTxOrFailTesting creates and returns a database transaction, or will end
@@ -32,7 +32,7 @@ func GetTxOrFailTesting(t *testing.T, db *sqlx.DB) *sqlx.Tx {
 // database name `foo_test`, where `foo` is the name in the config.
 func SetupTestingDatabase(t *testing.T, config Config, scriptPath string) *sqlx.DB {
 	// 1. Use the default database name but add _test to avoid overwriting data
-	config.DBName += "_test"
+	//config.DBName += "_test"
 	// 2. Load our schema file from file to create an empty database
 	cmd := exec.Command("mysql", config.DBName)
 	script, err := os.Open(scriptPath)

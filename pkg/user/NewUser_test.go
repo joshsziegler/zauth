@@ -8,8 +8,8 @@ import (
 
 func TestNewUserDuplicate(t *testing.T) {
 	database := db.SetupTestingDatabase(t, db.Config{
-		Username: "metis",
-		Password: "metis",
+		Username: "joshz",
+		Password: "Manikin06!",
 		Address:  "localhost",
 		DBName:   "zauth"},
 		"../../db-schema-v2.0.sql")
@@ -40,8 +40,8 @@ func TestNewUserDuplicate(t *testing.T) {
 
 func TestDuplicateEmail(t *testing.T) {
 	database := db.SetupTestingDatabase(t, db.Config{
-		Username: "metis",
-		Password: "metis",
+		Username: "joshz",
+		Password: "Manikin06!",
 		Address:  "localhost",
 		DBName:   "zauth"},
 		"../../db-schema-v2.0.sql")

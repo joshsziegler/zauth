@@ -11,10 +11,10 @@ import (
 	"github.com/joshsziegler/zauth/models/httpserver"
 	"github.com/joshsziegler/zauth/pkg/db"
 	"github.com/joshsziegler/zauth/pkg/email"
-	"github.com/joshsziegler/zauth/pkg/environment"
 	"github.com/joshsziegler/zauth/pkg/file"
 	"github.com/joshsziegler/zauth/pkg/ldap"
-	"github.com/joshsziegler/zauth/pkg/log"
+	"github.com/joshsziegler/zgo/pkg/environment"
+	"github.com/joshsziegler/zgo/pkg/log"
 )
 
 const (

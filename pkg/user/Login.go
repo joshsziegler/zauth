@@ -6,8 +6,8 @@ import (
 	"github.com/ansel1/merry"
 	"github.com/jmoiron/sqlx"
 
-	"github.com/joshsziegler/zauth/pkg/log"
 	pw "github.com/joshsziegler/zauth/pkg/password"
+	"github.com/joshsziegler/zgo/pkg/log"
 )
 
 // Login returns nil IFF the account is not disabled AND the password is correct

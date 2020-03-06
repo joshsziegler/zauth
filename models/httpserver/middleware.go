@@ -9,8 +9,8 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/jmoiron/sqlx"
 
-	"github.com/joshsziegler/zauth/pkg/log"
 	"github.com/joshsziegler/zauth/pkg/user"
+	"github.com/joshsziegler/zgo/pkg/log"
 )
 
 const (

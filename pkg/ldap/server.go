@@ -10,8 +10,8 @@ import (
 	"github.com/jmoiron/sqlx"
 	nmLdap "github.com/nmcclain/ldap"
 
-	"github.com/joshsziegler/zauth/pkg/log"
 	"github.com/joshsziegler/zauth/pkg/user"
+	"github.com/joshsziegler/zgo/pkg/log"
 )
 
 // Config is used to pass required configuration options for the LDAP server

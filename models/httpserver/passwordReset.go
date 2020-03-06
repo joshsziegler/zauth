@@ -7,9 +7,9 @@ import (
 	"github.com/ansel1/merry"
 	"github.com/gorilla/csrf"
 
-	"github.com/joshsziegler/zauth/pkg/log"
 	"github.com/joshsziegler/zauth/pkg/password"
 	"github.com/joshsziegler/zauth/pkg/user"
+	"github.com/joshsziegler/zgo/pkg/log"
 )
 
 // TODO: Should I combine this form&logic with the userDetail change password?

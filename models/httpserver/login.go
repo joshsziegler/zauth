@@ -8,8 +8,8 @@ import (
 
 	"github.com/ansel1/merry"
 	"github.com/gorilla/csrf"
-	"github.com/joshsziegler/zauth/pkg/log"
 	"github.com/joshsziegler/zauth/pkg/user"
+	"github.com/joshsziegler/zgo/pkg/log"
 )
 
 type LoginPageData struct {

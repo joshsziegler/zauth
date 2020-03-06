@@ -8,9 +8,9 @@ import (
 	_ "github.com/go-sql-driver/mysql" // Blank import required for SQL drivers
 	"github.com/jmoiron/sqlx"
 
-	"github.com/joshsziegler/zauth/pkg/log"
 	pw "github.com/joshsziegler/zauth/pkg/password"
 	"github.com/joshsziegler/zauth/pkg/secrets"
+	"github.com/joshsziegler/zgo/pkg/log"
 )
 
 // setUserPassword hashes the given cleartext password and updates the database.

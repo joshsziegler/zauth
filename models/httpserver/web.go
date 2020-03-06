@@ -12,8 +12,8 @@ import (
 	"github.com/gobuffalo/packr"
 
 	"github.com/joshsziegler/zauth/pkg/httpserver"
-	"github.com/joshsziegler/zauth/pkg/log"
 	"github.com/joshsziegler/zauth/pkg/secrets"
+	"github.com/joshsziegler/zgo/pkg/log"
 )
 
 var (

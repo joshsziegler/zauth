@@ -7,7 +7,7 @@ import (
 	_ "github.com/go-sql-driver/mysql" // Blank import required for SQL drivers
 	"github.com/jmoiron/sqlx"
 
-	"github.com/joshsziegler/zauth/pkg/log"
+	"github.com/joshsziegler/zgo/pkg/log"
 )
 
 // Config holds the database configuration, required for connecting to and

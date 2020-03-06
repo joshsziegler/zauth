@@ -28,7 +28,7 @@ CREATE TABLE `Groups` (
   `Description` text,
   `GroupID` int(11) DEFAULT NULL,
   PRIMARY KEY (`ID`),
-  UNIQUE KEY `uniq_username` (`Name`)
+  UNIQUE KEY `uniq_name` (`Name`)
 ) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
