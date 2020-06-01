@@ -7,5 +7,5 @@ ALTER TABLE Users
 	MODIFY LastLogin datetime NOT NULL DEFAULT '0001-01-01 00:00:00',
 	ADD COLUMN PasswordSet datetime NOT NULL DEFAULT '0001-01-01 00:00:00' AFTER PasswordHash;
 
-ALTER TABLE Groups
+ALTER TABLE `Groups`
     DROP COLUMN GroupID;
