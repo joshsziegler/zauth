@@ -4,7 +4,11 @@
 - task build not building when certain go files change?
 
 # TODO
-
+- File Sharing
+  - Upload files to correct upload/share directory
+  - Save uploaded files in the DB
+  - Link to a Group's files when they click on the link
+  - Show group members and files when clicked
 - Require Group for Git Login
 - Config options for: Full domain/URL, Website Name, Reply Email, Email Name, ...
 - Allow admins to SEND a password reset link to a given user? Or put on page?

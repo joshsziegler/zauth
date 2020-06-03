@@ -1,8 +1,10 @@
 package httpserver
 
 import (
+	"html/template"
 	"net/http"
 
+	"github.com/gorilla/csrf"
 	"github.com/joshsziegler/zauth/pkg/filesharing"
 	"github.com/joshsziegler/zauth/pkg/user"
 	// "github.com/joshsziegler/zauth/pkg/user"
@@ -25,11 +27,13 @@ func FileListGet(c *Context, w http.ResponseWriter, r *http.Request) error {
 	}
 
 	data := struct {
-		User  user.User
-		Files []filesharing.File
+		User      user.User
+		Files     []filesharing.File
+		CSRFField template.HTML
 	}{
 		*c.User,
 		files,
+		csrf.TemplateField(r),
 	}
 	Render(w, "file_list.html", data)
 	return nil
