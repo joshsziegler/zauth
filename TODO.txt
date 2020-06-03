@@ -2,6 +2,7 @@
 
 - Times seem to be reported incorrectly... reported as UTC, when actually EST?
 - task build not building when certain go files change?
+- The "Ballot Box with a Checkmark" Emoji ( U+1F5F9 ) used to show group membership doesn't appear to be supported by Ubuntu?  
 
 # TODO
 - File Sharing
