@@ -2,7 +2,7 @@
 
 <section>
     <h4>Files 
-        <a href="#" onclick="document.getElementById('upload-input').click()">Upload</a>
+        <a href="#" class="u-pull-right" onclick="document.getElementById('upload-input').click()">Upload</a>
         {{/* The default styling of a file upload input is ugly, so we hide it and use the HREF above to trigger it. 
              When the value of the input changes, the form will be submitted. 
              This works well, but browsers will try to "help" by inserting the previous value in this form when the user hits the back button.
@@ -15,19 +15,23 @@
     <table class="u-full-width">
         <thead>
             <tr>
-                <th></th>
-                <th>Name</th>
-                <th>Size</th>
-                <th>Created</th>
+                <th class="l-align">Name</th>
+                <th class="r-align hide-on-mobile">Size</th>
+                <th class="l-align hide-on-mobile">Created</th>
             </tr>
         </thead>
         <tbody>
             {{ range .Files }}
                 <tr>
-                     <td></td>
                      <td>{{ .Name | html }}</td>
                      <td>{{ .FileSize }}</td>
                      <td alt="{{ .CreatedAt }}">{{ .CreatedAt | FormatTimeAsRFC822 }}</td>
+                </tr>
+            {{ else }}
+                <tr>
+                    <td>&ndash;</td>
+                    <td>&ndash;</td>
+                    <td>&ndash;</td>
                 </tr>
             {{ end }}
         </tbody>

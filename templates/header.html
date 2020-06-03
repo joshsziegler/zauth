@@ -5,7 +5,7 @@
 	    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	    {{/* We don't want to use a favicon, but the browser will request one
 	         anyway if we don't give one. This should prevent that issue. See:
-	     stackoverflow.com/questions/1321878/how-to-prevent-favicon-ico-requests
+	         stackoverflow.com/questions/1321878/how-to-prevent-favicon-ico-requests
 	    */}}
 	    <link rel="icon" href="data:;base64,iVBORw0KGgo=">
 	    <title>zauth</title>
@@ -28,12 +28,10 @@
                 {{ if . }}
                     <a href="/users/{{ .Username }}">Me</a>
                     {{ if .IsAdmin }}
-                        <a href="/users" class="">Users</a>
-                         {{/* <a href="/user/new">New</a> */}}
-                        <a href="/groups" class="">Groups</a>
-                        {{/* <a href="/group/new">New</a> */}}
+                        <a href="/users">Users</a>
                     {{ end }}
-
+                        <a href="/groups">Groups</a>
+                        <a href="/files">Files</a>
                     <a href="/logout" class="u-pull-right">Logout</a>
                 {{ else }}
                     &nbsp; {{/* Prevent this from shrinking due to no text. TODO: Show login link if this isn't the login page? */}}
