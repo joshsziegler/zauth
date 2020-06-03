@@ -1,0 +1,27 @@
+{{template "header.html" .User }}
+
+<section>
+    <h4>Files <a href="/user/new" class="u-pull-right">New</a></h4>
+    <table class="u-full-width">
+        <thead>
+            <tr>
+                <th></th>
+                <th>Name</th>
+                <th>Size</th>
+                <th>Created</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{ range .Files }}
+                <tr>
+                     <td></td>
+                     <td>{{ .Name | html }}</td>
+                     <td>{{ .FileSize }}</td>
+                     <td alt="{{ .CreatedAt }}">{{ .CreatedAt | FormatTimeAsRFC822 }}</td>
+                </tr>
+            {{ end }}
+        </tbody>
+    </table>
+</section>
+
+{{template "footer.html"}}
