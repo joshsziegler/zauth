@@ -70,6 +70,7 @@ func Listen(database *sqlx.DB, listenTo string, isProduction bool) {
 	r.Handle("/group/new", Wrap(r, NewGroupPost, true)).Methods("POST")
 	// /groups/{groupname} - If none, show all if admin or redirect to self TODO: implement
 	r.Handle("/reset-password/{token}", Wrap(r, PasswordResetGetPost, false)).Methods("GET", "POST")
+	r.Handle("/files/{groupname}", Wrap(r, FileListGet, true)).Methods("GET")
 
 	// Start the HTTP servers
 	log.Infof("HTTP server listening on: %s", listenTo)

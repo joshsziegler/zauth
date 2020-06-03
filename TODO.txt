@@ -1,6 +1,10 @@
+# BUGFIX
+
+- Times seem to be reported incorrectly... reported as UTC, when actually EST?
+- task build not building when certain go files change?
+
 # TODO
 
-- Require Group for Redmine Login
 - Require Group for Git Login
 - Config options for: Full domain/URL, Website Name, Reply Email, Email Name, ...
 - Allow admins to SEND a password reset link to a given user? Or put on page?
