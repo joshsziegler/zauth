@@ -107,3 +107,9 @@ span.oi.help-icon[data-glyph="question-mark"] {
     background: #eee;
     cursor: pointer; /* Make it clear that this is actionable (click to show info */
 }
+r-align{
+    text-align: right;
+}
+l-align{
+    text-align: left;
+}
