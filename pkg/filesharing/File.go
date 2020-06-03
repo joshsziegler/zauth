@@ -33,14 +33,14 @@ type File struct {
 
 // GetFiles returns a sorted list of files in the Group -- or a specific folder
 // -- sorted by Name.
-func GetFiles(tx *sqlx.Tx, groupID int64) (files [](File), err error) {
+func GetFiles(tx *sqlx.Tx, groupName string) (files [](File), err error) {
 	files = make([](File), 0)
 	rows, err := tx.Queryx(`SELECT f.ID, f.Name, f.FileSize, f.Digest, f.CreatedAt, 
 		                           u.Username AS CreatedBy
 		                    FROM Files f 
 		                    LEFT JOIN Users u ON f.CreatedBy=u.ID
-		                    WHERE groupID=?
-		                    ORDER BY Name ASC`, groupID)
+		                    WHERE groupID=(SELECT ID FROM UserGroups WHERE Name=?)
+		                    ORDER BY Name ASC`, groupName)
 	if err != nil {
 		return files, err
 	}
