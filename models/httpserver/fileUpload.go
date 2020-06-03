@@ -8,17 +8,25 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"os"
+	"path"
 )
 
 const (
-	KiB = 1024
-	MiB = KiB * 1024
-	GiB = MiB * 1024
+	KiB          = 1024
+	MiB          = KiB * 1024
+	GiB          = MiB * 1024
+	UploadFolder = "uploads"
 )
 
 // FileUploadPost handles uploading one or more files from a user, to a Group.
 func FileUploadPost(c *Context, w http.ResponseWriter, r *http.Request) error {
 	// TODO: Check permissions and arguments
+
+	// Check for uploads directory, and create it if necessary
+	if _, err := os.Stat(UploadFolder); os.IsNotExist(err) {
+		os.Mkdir(UploadFolder, 0700)
+	}
 
 	var Buf bytes.Buffer
 
@@ -43,7 +51,7 @@ func FileUploadPost(c *Context, w http.ResponseWriter, r *http.Request) error {
 		log.Printf("File: %v    SHA 256: %s\n", fileHeader.Filename, hashString)
 
 		// Write the upload to disk
-		err = ioutil.WriteFile(hashString, fileBytes, 0640)
+		err = ioutil.WriteFile(path.Join(UploadFolder, hashString), fileBytes, 0640)
 		if err != nil {
 			log.Printf("Failed to write file to disk:\n%s", err)
 			w.WriteHeader(http.StatusInternalServerError) // ~ Code 500
