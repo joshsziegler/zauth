@@ -9,6 +9,7 @@
 - File Sharing
   - Link to a Group's files when they click on the link
   - Save uploaded files in the DB
+- Factor User-Group permissions out into functions like CanViewUser
 - Allow non-admins to create groups
   - Allow non-admins to add users TO groups they are admins of
 - Config options for: Full domain/URL, Website Name, Reply Email, Email Name, ...
@@ -18,6 +19,6 @@
   	mysql zauth -e "SELECT FirstName, LastName, LastLogin FROM Users WHERE LastLogin < (CURDATE() - INTERVAL 60 DAY)";
 
 - Disable Shared Accounts
-	UPDATE Users 
-	SET Disabled=1 
+	UPDATE Users
+	SET Disabled=1
 	WHERE FirstName IN ('Test', 'Map User 1', 'Map User 2', 'Map User 3', 'SVN', 'LDAP', 'Test', 'Synthetic Teammate', 'Demo', 'BOINC User', 'Air Force User', 'Redmine Account');

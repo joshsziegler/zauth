@@ -2,7 +2,7 @@
 
 {{$RequestingUser := .RequestingUser }}
 <section>
-    <h4>{{ .Group.Name | html }} <a class="u-pull-right" href="/files/{{.Group.Name}}">Files</a></h4>
+    <h4>{{ .Group.Name | html }} <a class="u-pull-right" href="/groups/{{.Group.Name}}/files">Files</a></h4>
     {{ template "flash_messages.html" . }}
     <blockquote>
         <p>{{ .Group.Description | html }}</p>
@@ -15,7 +15,7 @@
             <li>No Members Found</li>
         {{- end }}
     </ul>
-                    
+
 </section>
 
 {{template "footer.html"}}

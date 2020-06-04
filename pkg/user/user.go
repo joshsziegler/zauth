@@ -100,6 +100,21 @@ func (u User) IsAdmin() bool {
 	return false
 }
 
+// IsInGroup returns true if this User belongs to the specified group
+//
+// Warning: This is case-sensitve and requires the Groups member to be
+// populated.
+//
+// ** Doesn't use a pointer to `u` so it can be use in HTML templates.
+func (u User) IsInGroup(name string) bool {
+	for _, currName := range u.Groups {
+		if currName == name {
+			return true
+		}
+	}
+	return false
+}
+
 // userSetEnable is a helper function for UserEnable and UserDisable.
 //
 // Note that isEnabled is flipped because the database uses Disabled!

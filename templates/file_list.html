@@ -1,13 +1,13 @@
 {{template "header.html" .User }}
 
 <section>
-    <h4>Files 
+    <h4>Files
         <a href="#" class="u-pull-right" onclick="document.getElementById('upload-input').click()">Upload</a>
-        {{/* The default styling of a file upload input is ugly, so we hide it and use the HREF above to trigger it. 
-             When the value of the input changes, the form will be submitted. 
+        {{/* The default styling of a file upload input is ugly, so we hide it and use the HREF above to trigger it.
+             When the value of the input changes, the form will be submitted.
              This works well, but browsers will try to "help" by inserting the previous value in this form when the user hits the back button.
              To prevent the form from submitting on the back button, we set the autocomplete to off. */}}
-        <form id="upload-form" method="POST" action="/files/upload" enctype="multipart/form-data" style="display: none">
+             <form id="upload-form" method="POST" action="/groups/{{ .Group.Name }}/files/upload" enctype="multipart/form-data" style="display: none">
             <input id="upload-input" name="file" type="file" multiple autocomplete="off" onchange="this.parentElement.submit()">
             {{ .CSRFField }}
         </form>

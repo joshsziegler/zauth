@@ -19,7 +19,6 @@ type groupDetailData struct {
 func GroupDetailGet(c *Context, w http.ResponseWriter, r *http.Request) error {
 	// Get the requested group name from the URL
 	name := c.GetRouteVarTrim("name")
-
 	// TODO: Check the group exists
 	group, err := user.GetGroupWithUsers(c.Tx, name)
 	if err != nil {

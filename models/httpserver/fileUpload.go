@@ -11,6 +11,7 @@ import (
 	"path"
 
 	"github.com/ansel1/merry"
+	"github.com/joshsziegler/zauth/pkg/user"
 )
 
 const (
@@ -28,7 +29,20 @@ var (
 
 // FileUploadPost handles uploading one or more files from a user, to a Group.
 func FileUploadPost(c *Context, w http.ResponseWriter, r *http.Request) error {
-	// TODO: Check permissions and arguments
+	// TODO: Get the optional folder they are uploading to
+	// Get the requested group name from the URL and verify it's valid
+	name := c.GetRouteVarTrim("name")
+	// Check permissions BEFORE getting group for speed (must belong to group or be and admin)
+	if !c.User.IsInGroup(name) {
+		if !c.User.IsAdmin() {
+			return merry.Here(ErrPermissionDenied)
+		}
+	}
+	group, err := user.GetGroupWithUsers(c.Tx, name)
+	if err != nil {
+		return merry.Wrap(err)
+	}
+	fmt.Printf("Group: %+v\n", group)
 
 	// Check for uploads directory, and create it if necessary
 	// TODO: Is there a potential race-condition here, with the dir being
