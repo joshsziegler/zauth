@@ -14,12 +14,9 @@ type groupListData struct {
 }
 
 // GroupListGet shows the user a list of all current zauth groups.
+//
+// All users are allows to see the list of groups for discovery purposes.
 func GroupListGet(c *Context, w http.ResponseWriter, r *http.Request) error {
-	// Only admins can view this page
-	if !c.User.IsAdmin() {
-		return ErrPermissionDenied.Here()
-	}
-
 	groups, err := user.GetGroupsSliceWithoutUsers(c.Tx)
 	if err != nil {
 		return err

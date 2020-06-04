@@ -1,7 +1,7 @@
 {{template "header.html" .User }}
 
 <section>
-    <h4>All Groups <a href="/group/new" class="u-pull-right">New</a></h4>
+    <h4>All Groups {{ if .User.IsAdmin }}<a href="/group/new" class="u-pull-right">New</a>{{end}}</h4>
     {{ if ne .Message "" }}
         <p class="alert" role="alert">{{ .Message }}</p>
     {{ end }}
