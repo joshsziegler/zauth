@@ -57,15 +57,15 @@
                             <li>
                                 {{- if $RequestingUser.IsAdmin }}
                                     {{- if .Member -}}
-                                        <a href="/users/{{ $RequestedUserUsername }}/groups/{{ .Name }}/remove" class="plain">&#128505</a>
+                                        <a href="/users/{{ $RequestedUserUsername }}/groups/{{ .Name }}/remove" class="plain">&#9746;</a>
                                     {{- else -}}
-                                        <a href="/users/{{ $RequestedUserUsername }}/groups/{{ .Name }}/add" class="plain">&#9744</a>
+                                        <a href="/users/{{ $RequestedUserUsername }}/groups/{{ .Name }}/add" class="plain">&#9744;</a>
                                     {{- end }}
                                 {{- else -}}
                                     {{- if .Member -}}
-                                        &#128505
+                                        &#9746;
                                     {{- else -}}
-                                        &#9744
+                                        &#9744;
                                     {{- end }}
                                 {{- end }}
                                 {{ .Name -}}
