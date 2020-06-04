@@ -40,9 +40,9 @@ func FileUploadPost(c *Context, w http.ResponseWriter, r *http.Request) error {
 	}
 	group, err := user.GetGroupWithUsers(c.Tx, name)
 	if err != nil {
-		return merry.Wrap(err)
+		return merry.Wrap(err) // TODO: Return more descriptive error (SQL error, or no group with that name?)
 	}
-	fmt.Printf("Group: %+v\n", group)
+	fmt.Printf("Group: %+v\n", group) // TODO: Remove this...
 
 	// Check for uploads directory, and create it if necessary
 	// TODO: Is there a potential race-condition here, with the dir being
@@ -76,8 +76,7 @@ func FileUploadPost(c *Context, w http.ResponseWriter, r *http.Request) error {
 	}
 
 	// Success, so send them to the home page
-	// TODO: Show a Flash Message indicating the success and take them to the
-	// dir of the files using http://www.gorillatoolkit.org/pkg/sessions
-	http.Redirect(w, r, "/", http.StatusFound)
+	c.AddNormalFlash(fmt.Sprintf("Files successfully uploaded to %s", name))
+	http.Redirect(w, r, fmt.Sprintf("/groups/%s/files", name), http.StatusFound)
 	return nil
 }

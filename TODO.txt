@@ -1,8 +1,8 @@
 # BUGFIX
 
 - Times seem to be reported incorrectly... reported as UTC, when actually EST?
-- task build not building when certain go files change?
 - Group Names allow spaces and bad characters!
+- Users can view files for groups they don't belong to!
 
 # TODO
 
