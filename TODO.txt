@@ -2,14 +2,15 @@
 
 - Times seem to be reported incorrectly... reported as UTC, when actually EST?
 - task build not building when certain go files change?
-- The "Ballot Box with a Checkmark" Emoji ( U+1F5F9 ) used to show group membership doesn't appear to be supported by Ubuntu?  
+- Group Names allow spaces and bad characters!
 
 # TODO
+
 - File Sharing
-  - Allow non-LDAP-admins to view group lists and details
-  - Save uploaded files in the DB
   - Link to a Group's files when they click on the link
-- Require Group for Git Login
+  - Save uploaded files in the DB
+- Allow non-admins to create groups
+  - Allow non-admins to add users TO groups they are admins of
 - Config options for: Full domain/URL, Website Name, Reply Email, Email Name, ...
 - Allow admins to SEND a password reset link to a given user? Or put on page?
 - Deactivate Accounts With LastLogin > 90 Days Ago
