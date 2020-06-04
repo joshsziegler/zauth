@@ -150,6 +150,8 @@ func Wrap(router *mux.Router, subHandler Handler, requireLogin bool) http.Handle
 				ErrorUnauthorized(w, merry.UserMessage(err), c.User)
 			} else if merry.Is(err, ErrInternal) {
 				Error(w, 500, "Error", merry.UserMessage(err), c.User)
+			} else if merry.Is(err, ErrBadRequest) {
+				Error(w, 400, "Error", merry.UserMessage(err), c.User)
 			} else {
 				// We can't guarantee this error has a nice UserMessage
 				Error(w, 500, "Error", merry.Details(err), nil)

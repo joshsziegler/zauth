@@ -6,6 +6,9 @@ var (
 	ErrInternal = merry.
 			New("internal server error").
 			WithUserMessage("Sorry, but the server encountered an error.")
+	ErrBadRequest = merry.
+			New("bad request").
+			WithUserMessage("Your request was bad and/or invalid.")
 	ErrPermissionDenied = merry.
 				New("permission denied").
 				WithUserMessage("You do not have permission to view this page.")
