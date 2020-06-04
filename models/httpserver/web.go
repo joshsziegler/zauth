@@ -66,6 +66,7 @@ func Listen(database *sqlx.DB, listenTo string, isProduction bool) {
 	r.Handle("/users/{username}/{isEnabled:(?:enable|disable)}", Wrap(r, userSetEnabled, true)).Methods("GET")
 	r.Handle("/users/{username}/groups/{groupname}/{addOrRemove:(?:add|remove)}", Wrap(r, userAddRemoveGroups, true)).Methods("GET")
 	r.Handle("/groups", Wrap(r, GroupListGet, true)).Methods("GET")
+	r.Handle("/groups/{name}", Wrap(r, GroupDetailGet, true)).Methods("GET")
 	r.Handle("/group/new", Wrap(r, NewGroupGet, true)).Methods("GET")
 	r.Handle("/group/new", Wrap(r, NewGroupPost, true)).Methods("POST")
 	// /groups/{groupname} - If none, show all if admin or redirect to self TODO: implement

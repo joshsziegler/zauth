@@ -1,0 +1,21 @@
+{{template "header.html" .RequestingUser }}
+
+{{$RequestingUser := .RequestingUser }}
+<section>
+    <h4>{{ .Group.Name | html }} <a class="u-pull-right" href="/files/{{.Group.Name}}">Files</a></h4>
+    {{ template "flash_messages.html" . }}
+    <blockquote>
+        <p>{{ .Group.Description | html }}</p>
+    </blockquote>
+    <h2>Members</h2>
+    <ul>
+        {{ range .Group.Members -}}
+            <li>{{ . }}</li>
+        {{- else -}}
+            <li>No Members Found</li>
+        {{- end }}
+    </ul>
+                    
+</section>
+
+{{template "footer.html"}}

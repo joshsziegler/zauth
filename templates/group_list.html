@@ -18,7 +18,7 @@
         <tbody>
             {{ range .Groups }}
                 <tr>
-                     <td>{{ .Name | html }}</td>
+                    <td><a href="/groups/{{ .Name  }}">{{ .Name | html }}</a></td>
                      <td>{{ .Description | html }}</td>
                 </tr>
             {{ end }}

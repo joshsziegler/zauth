@@ -56,6 +56,33 @@ func GetGroupsSliceWithoutUsers(tx *sqlx.Tx) (groups []*Group, err error) {
 	return
 }
 
+func GetGroupWithUsers(tx *sqlx.Tx, name string) (group Group, err error) {
+	err = tx.QueryRowx(`SELECT * FROM UserGroups WHERE Name=?`, name).StructScan(&group)
+	if err != nil {
+		return Group{}, merry.Wrap(err)
+	}
+	// TODO: Get member usernames
+	rows, err := tx.Queryx(`SELECT Users.Username
+							FROM User2Group
+							INNER JOIN Users
+								ON User2Group.UserID=Users.ID
+							WHERE User2Group.GroupID=?
+							ORDER BY Users.Username ASC;`, group.ID)
+	if err != nil {
+		return group, merry.Wrap(err)
+	}
+	defer rows.Close()
+	var username string
+	for rows.Next() {
+		err = rows.Scan(&username)
+		if err != nil {
+			return group, merry.Wrap(err)
+		}
+		group.Members = append(group.Members, username)
+	}
+	return
+}
+
 // GetGroupsMapWithoutUsers returns a map of all Groups (using their DB ID as
 // the key), sans Members attribute.
 //
