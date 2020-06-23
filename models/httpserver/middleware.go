@@ -102,6 +102,7 @@ func Wrap(router *mux.Router, subHandler Handler, requireLogin bool) http.Handle
 		// Create a DB transaction for our context struct
 		tx, err := DB.Beginx()
 		if err != nil {
+			log.Error(err)
 			Error(w, 500, "Error",
 				"Sorry, but the server encountered an error.", nil)
 		}
@@ -130,6 +131,7 @@ func Wrap(router *mux.Router, subHandler Handler, requireLogin bool) http.Handle
 		if username != nil {
 			tempUser, err := user.GetUserWithGroups(tx, *username)
 			if err != nil {
+				log.Error(err)
 				Error(w, 500, "Error",
 					"Sorry, but the server encountered an error.", nil)
 				err = c.Tx.Commit()
