@@ -4,12 +4,10 @@ import (
 	"fmt"
 	"html/template"
 	"net/http"
-	"strconv"
 	"strings"
 
 	"github.com/ansel1/merry"
 	"github.com/gorilla/csrf"
-	"github.com/joshsziegler/zauth/pkg/email"
 	"github.com/joshsziegler/zauth/pkg/user"
 )
 
@@ -74,19 +72,7 @@ func NewUserPost(c *Context, w http.ResponseWriter, r *http.Request) error {
 	}
 
 	// Send new user an email asking them to login and set their password
-	// TODO: Allow this email to be configured? - JZ
-	// TODO: Set expiration time via config? - JZ
-	resetLink := newUser.GetPasswordResetToken(8)
-	err = email.Send("MindModeling", "no-reply@mindmodeling.org",
-		newUser.CommonName(), newUser.Email,
-		"Your New MindModeling Account",
-		"A new account has been created",
-		`<p>Hello `+newUser.CommonName()+`,</p>
-		<p>A new account has been created for you on MindModeling. Your username is <b>`+newUser.Username+`</b>. To complete
-		the setup, you need to
-		<a href="http://user.mindmodeling.org/reset-password/`+resetLink+`">
-		set your password here</a>. This link is valid for the next `+strconv.Itoa(8)+`
-		hours.</p>`)
+	newUser.SendPasswordResetEmail()
 	if err != nil {
 		// User was created successfully, but the password email failed
 		msg := fmt.Sprintf("User %s successfully created, but their password reset email failed to send. '%s'",

@@ -1,6 +1,7 @@
 package user
 
 import (
+	"strconv"
 	"time"
 
 	"github.com/ansel1/merry"
@@ -8,6 +9,7 @@ import (
 	_ "github.com/go-sql-driver/mysql" // Blank import required for SQL drivers
 	"github.com/jmoiron/sqlx"
 
+	"github.com/joshsziegler/zauth/pkg/email"
 	pw "github.com/joshsziegler/zauth/pkg/password"
 	"github.com/joshsziegler/zauth/pkg/secrets"
 	"github.com/joshsziegler/zgo/pkg/log"
@@ -133,4 +135,30 @@ func ValidatePasswordResetToken(tx *sqlx.Tx, token string) (username string, err
 	}
 	// OK, reset password for login (e.g. allow to change it)
 	return
+}
+
+// SendPasswordResetEmail uses `GetPasswordResetToken` to create and send a 
+// password reset link.
+// 
+// This uses the configured site name, URI, reply email, and reset timeout to 
+// create the email. If these are incorrectly configured, this may not work!
+func (u *User) SendPasswordResetEmail() error {
+	// TODO: Allow these to be set in the config.yml
+	siteName := "MindModeling"
+	siteURI := "https://user.mindmodeling.org"
+	replyEmail := "no-reply@mindmodeling.org"
+	linkTime := int64(8) // In Hours
+
+	// Generate link and send the email
+	resetLink := u.GetPasswordResetToken(linkTime)
+	err := email.Send(siteName, replyEmail, u.CommonName(), u.Email,
+		"Your New "+siteName+" Account",
+		"A new account has been created",
+		`<p>Hello `+u.CommonName()+`,</p>
+		<p>A new account has been created for you. Your username is <b>`+u.Username+`</b>. To complete
+		the setup, you need to
+		<a href="`+siteURI+`/reset-password/`+resetLink+`">
+		set your password here</a>. This link is valid for the next `+strconv.FormatInt(linkTime, 10)+`
+		hours.</p>`)
+	return err
 }
