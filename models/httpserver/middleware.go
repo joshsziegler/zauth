@@ -79,17 +79,18 @@ type Handler = func(c *Context, w http.ResponseWriter, r *http.Request) error
 // The sub handler MUST implement Handler.
 //
 // Order of operations:
-//  - Get the user object if logged in
-//  - Log request (before auth req redirection)
-//  - Redirect to login IFF auth is required
-//  - Get flash messages if any
-//  -- run page-specific sub-handler
-//  - If there is an error, STOP continuing and render a proper error
-//  - If there are new flash messages, SAVE them
-//  - Render the page OR render the error
+//   - Get the user object if logged in
+//   - Log request (before auth req redirection)
+//   - Redirect to login IFF auth is required
+//   - Get flash messages if any
+//     -- run page-specific sub-handler
+//   - If there is an error, STOP continuing and render a proper error
+//   - If there are new flash messages, SAVE them
+//   - Render the page OR render the error
 //
 // TODO: Defer logging the request until we have the result, so we can log them
-//       on the same line like so: josh POST /group/new -> error: duplicate name
+//
+//	on the same line like so: josh POST /group/new -> error: duplicate name
 func Wrap(router *mux.Router, subHandler Handler, requireLogin bool) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		// Create the context that we pass to the subHandler

@@ -74,12 +74,13 @@ type passwordResetHelper struct {
 // password reset tokens still "out there."
 //
 // From the documentation for github.com/dchest/passwordreset:
-//   Create a function that will query your users database and return some
-//   password-related value for the given login. A password-related value means
-//   some value that will change once a user changes their password, for
-//   example: a password hash, a random salt used to generate it, or time of
-//   password creation. This value, mixed with app-specific secret key, will be
-//   used as a key for password reset token, thus it will be kept secret.
+//
+//	Create a function that will query your users database and return some
+//	password-related value for the given login. A password-related value means
+//	some value that will change once a user changes their password, for
+//	example: a password hash, a random salt used to generate it, or time of
+//	password creation. This value, mixed with app-specific secret key, will be
+//	used as a key for password reset token, thus it will be kept secret.
 func getPasswordResetValue(passwordHash string, passwordSet time.Time) []byte {
 	return []byte(passwordHash + passwordSet.String())
 }
@@ -137,10 +138,10 @@ func ValidatePasswordResetToken(tx *sqlx.Tx, token string) (username string, err
 	return
 }
 
-// SendPasswordResetEmail uses `GetPasswordResetToken` to create and send a 
+// SendPasswordResetEmail uses `GetPasswordResetToken` to create and send a
 // password reset link.
-// 
-// This uses the configured site name, URI, reply email, and reset timeout to 
+//
+// This uses the configured site name, URI, reply email, and reset timeout to
 // create the email. If these are incorrectly configured, this may not work!
 func (u *User) SendPasswordResetEmail() error {
 	// TODO: Allow these to be set in the config.yml

@@ -28,9 +28,9 @@ type Config struct {
 // This sets several default parameters for the MySQL database:
 //   - collation: Sets the charset, but avoids the additional queries of charset
 //   - parseTime: changes the output type of DATE and DATETIME values to
-//		 time.Time instead of []byte / string
+//     time.Time instead of []byte / string
 //   - interpolateParams: Reduces the number of round trips required to
-//       interpolate placeholders (i.e. ?)
+//     interpolate placeholders (i.e. ?)
 func MustConnect(config Config) *sqlx.DB {
 	config.Address = fmt.Sprintf("tcp(%s)", config.Address)
 	// Create the Data Source Name (DSN), but print a password-masked version

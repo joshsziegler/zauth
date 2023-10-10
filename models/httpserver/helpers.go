@@ -55,7 +55,8 @@ func ErrorInternal(w http.ResponseWriter) {
 // custom message (e.g. Sorry, but you don't have permission to view that.)"
 //
 // See this Stack Overflow question for why 403 is used instead of 401:
-//     https://stackoverflow.com/a/6937030
+//
+//	https://stackoverflow.com/a/6937030
 func ErrorUnauthorized(w http.ResponseWriter, message string, user *user.User) {
 	Error(w, 403, "Unauthorized", message, user)
 }

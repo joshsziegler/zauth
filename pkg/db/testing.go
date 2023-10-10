@@ -1,4 +1,5 @@
-//+build !test
+//go:build !test
+// +build !test
 
 // The line above will exclude this file from builds, except during testing.
 // This file contains methods useful for doing *real* database tests, rather
