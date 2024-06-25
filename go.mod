@@ -10,7 +10,6 @@ require (
 	github.com/dchest/passwordreset v0.0.0-20190826080013-4518b1f41006
 	github.com/dustin/go-humanize v1.0.1
 	github.com/go-sql-driver/mysql v1.8.1
-	github.com/go-yaml/yaml v2.1.0+incompatible
 	github.com/gobuffalo/envy v1.10.2 // indirect
 	github.com/gobuffalo/packd v1.0.2 // indirect
 	github.com/gobuffalo/packr v1.30.1
@@ -28,5 +27,4 @@ require (
 	golang.org/x/crypto v0.24.0
 	golang.org/x/mod v0.18.0 // indirect
 	gopkg.in/check.v1 v1.0.0-20190902080502-41f04d3bba15 // indirect
-	gopkg.in/yaml.v2 v2.4.0 // indirect
 )

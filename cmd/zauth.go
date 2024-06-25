@@ -1,23 +1,24 @@
 package main
 
 import (
-	"io/ioutil"
+	"encoding/json"
+	"os"
 
 	"github.com/ansel1/merry"
 	_ "github.com/go-sql-driver/mysql" // Blank import required for SQL drivers
-	"github.com/go-yaml/yaml"
 	"github.com/jmoiron/sqlx"
+
+	"github.com/joshsziegler/zgo/pkg/file"
+	"github.com/joshsziegler/zgo/pkg/log"
 
 	"github.com/joshsziegler/zauth/models/httpserver"
 	"github.com/joshsziegler/zauth/pkg/db"
 	"github.com/joshsziegler/zauth/pkg/email"
 	"github.com/joshsziegler/zauth/pkg/ldap"
-	"github.com/joshsziegler/zgo/pkg/file"
-	"github.com/joshsziegler/zgo/pkg/log"
 )
 
 const (
-	configPath  = `config.yml`
+	configPath  = `config.json`
 	programName = `zauth`
 )
 
@@ -45,19 +46,20 @@ type Config struct {
 	SendGridAPIKey string
 }
 
-// mustLoadConfig loads and returns our configuration from a YAML file or panic.
+// mustLoadConfig loads and returns our configuration from a JSON file or panic.
 func mustLoadConfig() (c Config) {
 	// Read the existing config file from disk
 	if file.Exists(configPath) {
-		data, err := ioutil.ReadFile(configPath)
+		data, err := os.ReadFile(configPath)
 		if err != nil {
 			panic(merry.Prepend(err, "error reading "+configPath))
 		}
-		err = yaml.Unmarshal(data, &c)
+		err = json.Unmarshal(data, &c)
 		if err != nil {
-			panic(merry.Prepend(err, "error parsing YAML from "+configPath))
+			panic(merry.Prepend(err, "error parsing JSON from "+configPath))
 		}
 	}
+	log.Infof("Config: %+v\n", c)
 
 	return c
 }

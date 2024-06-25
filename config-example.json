@@ -1,0 +1,19 @@
+{
+  "Production": false,
+  "SendGridAPIKey": "YOUR-KEY-HERE",
+  "Database": {
+    "Username": "YourUsername",
+    "Password": "YourPassword!",
+    "Address": "localhost:3306",
+    "DBName": "zauth"
+  },
+  "LDAP": {
+    "BaseDN": "dc=example,dc=com",
+    "UserOU": "ou=People",
+    "GroupOU": "ou=Group",
+    "ListenTo": "localhost:3389"
+  },
+  "HTTP": {
+    "ListenTo": "localhost:8080"
+  }
+}
