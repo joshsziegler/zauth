@@ -1,6 +1,6 @@
 module github.com/joshsziegler/zauth
 
-go 1.24.0
+go 1.25.0
 
 require (
 	github.com/ansel1/merry v1.8.0
@@ -17,7 +17,7 @@ require (
 	github.com/joshsziegler/zgo v0.11.0
 	github.com/nmcclain/ldap v0.0.0-20210720162743-7f8d1e44eeba
 	github.com/sendgrid/sendgrid-go v3.14.0+incompatible
-	golang.org/x/crypto v0.45.0
+	golang.org/x/crypto v0.52.0
 )
 
 require (
