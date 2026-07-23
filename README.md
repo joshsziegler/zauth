@@ -37,6 +37,37 @@ will recompile and run the new application if you change any source files:
 task run
 ```
 
+## Docker Development
+
+The repo includes a `docker-compose.yml` with two services: `mariadb` (the
+database, with the schema loaded on first start) and `dev` (a Go toolchain
+container with the repo mounted at `/src`).
+
+```sh
+# Start MariaDB and the dev container
+docker compose up -d
+
+# Seed the database with dev users and groups (fresh DB only)
+docker compose exec dev go run ./cmd/seed
+
+# Run the tests
+docker compose exec dev go test ./...
+
+# Build the binary (lands in the repo on the host via the bind mount)
+docker compose exec dev go build -o zauth ./cmd
+```
+
+Database settings for tests and the seed command come from the `ZAUTH_DB_*`
+environment variables (see `db.ConfigFromEnv`). The compose file sets them for
+the `dev` container; on the host they default to `127.0.0.1:3306`, which the
+`mariadb` service publishes, so a host-built binary works too.
+
+To wipe the database and start over (re-runs the schema and lets you re-seed):
+
+```sh
+docker compose down -v && docker compose up -d
+```
+
 ## FAQ
 
 ### I get "Forbidden - CSRF token invalid" when logging in!

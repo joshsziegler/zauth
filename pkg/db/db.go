@@ -2,6 +2,7 @@ package db
 
 import (
 	"fmt"
+	"os"
 
 	"github.com/ansel1/merry"
 	_ "github.com/go-sql-driver/mysql" // Blank import required for SQL drivers
@@ -21,6 +22,27 @@ type Config struct {
 	Address string
 	// DBName: The name of the MySQL database to use.
 	DBName string
+}
+
+// ConfigFromEnv returns a Config built from the ZAUTH_DB_* environment
+// variables, falling back to local development defaults. Tests and the seed
+// command use this so the same binary works on the host and in Docker.
+func ConfigFromEnv() Config {
+	return Config{
+		Username: envOr("ZAUTH_DB_USERNAME", "zauth"),
+		Password: envOr("ZAUTH_DB_PASSWORD", "zauth-dev-only"),
+		Address:  envOr("ZAUTH_DB_ADDRESS", "127.0.0.1:3306"),
+		DBName:   envOr("ZAUTH_DB_NAME", "zauth"),
+	}
+}
+
+// envOr returns the environment variable's value, or fallback if it is unset
+// or empty.
+func envOr(key, fallback string) string {
+	if v := os.Getenv(key); v != "" {
+		return v
+	}
+	return fallback
 }
 
 // MustConnect connects and returns a database connection, or calls os.Exit(1).

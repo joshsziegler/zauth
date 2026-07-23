@@ -46,3 +46,20 @@ tasks:
     desc: Run all the go tests.
     cmds:
       - go test ./...
+
+  up:
+    desc: Start the Docker development containers (MariaDB and dev).
+    cmds:
+      - docker compose up -d
+
+  down:
+    desc: Stop the Docker development containers (MariaDB and dev).
+    cmds:
+      - docker compose down
+
+  reset-db:
+    desc: Wipe the database and start fresh (schema reloads on startup).
+    prompt: This deletes ALL database data, including seeded users. Continue?
+    cmds:
+      - docker compose down -v
+      - docker compose up -d

@@ -7,12 +7,8 @@ import (
 )
 
 func TestNewUserDuplicate(t *testing.T) {
-	database := db.SetupTestingDatabase(t, db.Config{
-		Username: "joshz",
-		Password: "Manikin06!",
-		Address:  "localhost",
-		DBName:   "zauth"},
-		"../../db-schema-v2.0.sql")
+	database := db.SetupTestingDatabase(t,
+		"../../db-schema-v2.0.sql", "../../db-schema-v2.upgrade.sql")
 
 	// NewUser(tx *sqlx.Tx, firstName string, lastName string, email string) (user User, err error)
 	tx := db.GetTxOrFailTesting(t, database)
@@ -39,12 +35,8 @@ func TestNewUserDuplicate(t *testing.T) {
 }
 
 func TestDuplicateEmail(t *testing.T) {
-	database := db.SetupTestingDatabase(t, db.Config{
-		Username: "joshz",
-		Password: "Manikin06!",
-		Address:  "localhost",
-		DBName:   "zauth"},
-		"../../db-schema-v2.0.sql")
+	database := db.SetupTestingDatabase(t,
+		"../../db-schema-v2.0.sql", "../../db-schema-v2.upgrade.sql")
 
 	// Create a non-duplicate, just to be sure
 	tx := db.GetTxOrFailTesting(t, database)

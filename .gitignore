@@ -1,4 +1,5 @@
 zauth
+config.json
 config.yml
 secrets.json
 .task
