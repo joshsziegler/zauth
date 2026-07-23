@@ -2,6 +2,7 @@ package httpserver
 
 import (
 	"html/template"
+	"io/fs"
 	"net/http"
 
 	"github.com/gorilla/csrf"
@@ -9,8 +10,7 @@ import (
 	"github.com/gorilla/sessions"
 	"github.com/jmoiron/sqlx"
 
-	"github.com/gobuffalo/packr"
-
+	"github.com/joshsziegler/zauth"
 	"github.com/joshsziegler/zauth/pkg/httpserver"
 	"github.com/joshsziegler/zauth/pkg/secrets"
 	"github.com/joshsziegler/zgo/pkg/log"
@@ -45,16 +45,17 @@ func Listen(database *sqlx.DB, listenTo string, isProduction bool) {
 		HttpOnly: true,                 // Prevent JavaScript access to this cookie
 		// Secure:   true,                    // Only sent over HTTPS
 	}
-	// Load static assets (from disk [dev] or binary [build])
-	boxStatic := packr.NewBox("../../public")
-	boxTemplates := packr.NewBox("../../templates")
-	// Load our templates
-	templates = httpserver.MustLoadBoxedTemplates(boxTemplates)
+	// Load static assets and templates embedded in the binary
+	staticFS, err := fs.Sub(zauth.Public, "public")
+	if err != nil {
+		log.Fatalf("error loading embedded static assets: %s", err)
+	}
+	templates = httpserver.MustLoadTemplates(zauth.Templates, "templates/*.html")
 
 	// Create the HTTP route handler
 	r := mux.NewRouter().StrictSlash(true)
 	r.NotFoundHandler = Wrap(r, pageNotFound, false)
-	r.PathPrefix("/static/").Handler(http.StripPrefix("/static/", http.FileServer(boxStatic)))
+	r.PathPrefix("/static/").Handler(http.StripPrefix("/static/", http.FileServer(http.FS(staticFS))))
 	r.Handle("/", Wrap(r, LoginOrUserPageGet, false)).Methods("GET")
 	r.Handle(urlLogin, Wrap(r, LoginGetPost, false)).Methods("GET", "POST").Name("login")
 	r.Handle("/logout", Wrap(r, LogoutGet, true)).Methods("GET")
@@ -73,7 +74,7 @@ func Listen(database *sqlx.DB, listenTo string, isProduction bool) {
 
 	// Start the HTTP servers
 	log.Infof("HTTP server listening on: %s", listenTo)
-	err := http.ListenAndServe(listenTo,
+	err = http.ListenAndServe(listenTo,
 		csrf.Protect(secrets.CSRFKey(), csrf.Secure(isProduction))(r))
 	if err != nil {
 		log.Fatalf("error running http server: %s", err)

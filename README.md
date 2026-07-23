@@ -12,16 +12,14 @@ The build process requires:
 - Task
 - Goimports
 - Minify
-- Packr
 
-We will leave installing Go and MySQL to you. Installing Task, Minify, and Packr
-can be done like this:
+We will leave installing Go and MySQL to you. Installing Task, Goimports, and
+Minify can be done like this:
 
 ```sh
 go get -u github.com/go-task/task/v2/cmd/task
 go get -u golang.org/x/tools/cmd/goimports
 go get -u github.com/tdewolff/minify/cmd/minify
-go get -u github.com/gobuffalo/packr/packr
 ```
 
 After that you can now build and run the application by using Task from the

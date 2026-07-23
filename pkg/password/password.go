@@ -135,7 +135,7 @@ func Valid(password string, hashedPassword string) (valid bool,
 
 // Hash take a plaintext password and returns a securely hashed version.
 //
-// Currently uses bcrypt
+// # Currently uses bcrypt
 //
 // Use this instead of a specific hashing algorithm so we can change which
 // algorithm is used between versions.

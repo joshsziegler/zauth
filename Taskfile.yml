@@ -1,6 +1,6 @@
 # https://taskfile.dev
 
-version: '2'
+version: '3'
 
 vars:
   EXE: zauth{{exeExt}}
@@ -24,7 +24,7 @@ tasks:
     deps: [css]
     cmds:
         - goimports -l -w ./
-        - packr build -ldflags="-X main.Version={{.VERSION}} -X main.BuildDate={{now | date "2006-01-02T15:04:05Z07:00"}}" -o {{.EXE}} cmd/zauth.go
+        - go build -ldflags="-X main.Version={{.VERSION}} -X main.BuildDate={{now | date "2006-01-02T15:04:05Z07:00"}}" -o {{.EXE}} cmd/zauth.go
     vars:
       VERSION:
         sh: git describe --dirty
