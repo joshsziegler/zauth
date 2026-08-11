@@ -69,6 +69,6 @@ func main() {
 	config = mustLoadConfig()
 	DB = db.MustConnect(config.Database)
 	email.Init(config.SendGridAPIKey)
-	go httpserver.Listen(DB, config.HTTP.ListenTo, config.Production)
+	go httpserver.Listen(DB, config.HTTP.ListenTo)
 	ldap.Listen(DB, config.LDAP) // blocking
 }

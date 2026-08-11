@@ -5,7 +5,6 @@ import (
 	"io/fs"
 	"net/http"
 
-	"github.com/gorilla/csrf"
 	"github.com/gorilla/mux"
 	"github.com/gorilla/sessions"
 	"github.com/jmoiron/sqlx"
@@ -32,7 +31,7 @@ const (
 )
 
 // Listen performs setup and runs the Web server (blocking)
-func Listen(database *sqlx.DB, listenTo string, isProduction bool) {
+func Listen(database *sqlx.DB, listenTo string) {
 	DB = database
 
 	// Setup sessions using secure cookies
@@ -72,10 +71,16 @@ func Listen(database *sqlx.DB, listenTo string, isProduction bool) {
 	// /groups/{groupname} - If none, show all if admin or redirect to self TODO: implement
 	r.Handle("/reset-password/{token}", Wrap(r, PasswordResetGetPost, false)).Methods("GET", "POST")
 
+	// CSRF protection is origin-based (Sec-Fetch-Site / Origin vs. Host) rather
+	// than token-based: gorilla/csrf has been unmaintained since April 2025 and
+	// carries an unfixed advisory (CVE-2025-47909), and its replacement landed
+	// in the standard library in Go 1.25. Requests carrying neither header are
+	// allowed, since CSRF is an attack only a browser can be tricked into.
+	csrfProtect := http.NewCrossOriginProtection()
+
 	// Start the HTTP servers
 	log.Infof("HTTP server listening on: %s", listenTo)
-	err = http.ListenAndServe(listenTo,
-		csrf.Protect(secrets.CSRFKey(), csrf.Secure(isProduction))(r))
+	err = http.ListenAndServe(listenTo, csrfProtect.Handler(r))
 	if err != nil {
 		log.Fatalf("error running http server: %s", err)
 	}

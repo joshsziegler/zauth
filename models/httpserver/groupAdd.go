@@ -2,12 +2,10 @@ package httpserver
 
 import (
 	"fmt"
-	"html/template"
 	"net/http"
 	"strings"
 
 	"github.com/ansel1/merry"
-	"github.com/gorilla/csrf"
 	"github.com/joshsziegler/zauth/pkg/user"
 )
 
@@ -20,7 +18,6 @@ type newGroupPageData struct {
 	User         *user.User
 	ErrorMessage string
 	Form         formNewGroup
-	CSRFField    template.HTML
 }
 
 func newFormNewGroup(r *http.Request) formNewGroup {
@@ -37,7 +34,7 @@ func NewGroupGet(c *Context, w http.ResponseWriter, r *http.Request) error {
 		return ErrPermissionDenied.Here()
 	}
 	// Handle the request
-	data := newGroupPageData{User: c.User, CSRFField: csrf.TemplateField(r)}
+	data := newGroupPageData{User: c.User}
 	Render(w, "group_new.html", data)
 	return nil
 }
@@ -49,7 +46,7 @@ func NewGroupPost(c *Context, w http.ResponseWriter, r *http.Request) error {
 		return ErrPermissionDenied.Here()
 	}
 	// Handle the request
-	data := newGroupPageData{User: c.User, CSRFField: csrf.TemplateField(r)}
+	data := newGroupPageData{User: c.User}
 	form := newFormNewGroup(r)
 	err := user.AddGroup(c.Tx, form.Name, form.Description)
 	if err != nil {

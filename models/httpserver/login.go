@@ -1,22 +1,18 @@
 package httpserver
 
 import (
-	"html/template"
 	"net/http"
-
 	"strings"
 
 	"github.com/ansel1/merry"
-	"github.com/gorilla/csrf"
 	"github.com/joshsziegler/zauth/pkg/user"
 	"github.com/joshsziegler/zgo/pkg/log"
 )
 
 type LoginPageData struct {
-	Message   string
-	Error     string
-	Username  string
-	CSRFField template.HTML
+	Message  string
+	Error    string
+	Username string
 }
 
 // LoginGetPost handles a user's request to view the login page (GET and POST).
@@ -31,9 +27,7 @@ func LoginGetPost(c *Context, w http.ResponseWriter, r *http.Request) error {
 		return nil
 	}
 
-	// Create page data here so we don't forget to create the CSRF token
-	data := LoginPageData{CSRFField: csrf.TemplateField(r),
-		Message: c.NormalFlashMessage, Error: c.ErrorFlashMessage}
+	data := LoginPageData{Message: c.NormalFlashMessage, Error: c.ErrorFlashMessage}
 
 	switch r.Method {
 	case "GET":
