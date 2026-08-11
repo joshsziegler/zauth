@@ -4,8 +4,8 @@ import (
 	"net/http"
 )
 
-// LogoutGet handles a user's request to logout of zauth.
-func LogoutGet(c *Context, w http.ResponseWriter, r *http.Request) error {
+// LogoutPost handles a user's request to logout of zauth.
+func LogoutPost(c *Context, w http.ResponseWriter, r *http.Request) error {
 	// Always returns a session, even if it's empty
 	session, err := store.Get(r, sessionName)
 	if err != nil {

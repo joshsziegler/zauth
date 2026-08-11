@@ -37,10 +37,18 @@
                     {{ with .RequestedUser }}
                         {{- if .Disabled -}}
                             <td>Logins Disabled</td>
-                            <td><a href="/users/{{ .Username }}/enable">Enable</a></td>
+                            <td>
+                                <form action="/users/{{ .Username }}/enable" method="post" class="inline">
+                                    <button type="submit" class="button-link">Enable</button>
+                                </form>
+                            </td>
                         {{- else -}}
                             <td>Logins Enabled</td>
-                            <td><a href="/users/{{ .Username }}/disable">Disable</a></td>
+                            <td>
+                                <form action="/users/{{ .Username }}/disable" method="post" class="inline">
+                                    <button type="submit" class="button-link">Disable</button>
+                                </form>
+                            </td>
                         {{- end -}}
                     {{ end }}
                 </tr>
@@ -57,9 +65,15 @@
                             <li>
                                 {{- if $RequestingUser.IsAdmin }}
                                     {{- if .Member -}}
-                                        <a href="/users/{{ $RequestedUserUsername }}/groups/{{ .Name }}/remove" class="plain">&#9746;</a>
+                                        <form action="/users/{{ $RequestedUserUsername }}/groups/{{ .Name }}/remove" method="post" class="inline">
+                                            <button type="submit" class="button-link plain" title="Remove from {{ .Name }}"
+                                                aria-label="Remove from {{ .Name }}">&#9746;</button>
+                                        </form>
                                     {{- else -}}
-                                        <a href="/users/{{ $RequestedUserUsername }}/groups/{{ .Name }}/add" class="plain">&#9744;</a>
+                                        <form action="/users/{{ $RequestedUserUsername }}/groups/{{ .Name }}/add" method="post" class="inline">
+                                            <button type="submit" class="button-link plain" title="Add to {{ .Name }}"
+                                                aria-label="Add to {{ .Name }}">&#9744;</button>
+                                        </form>
                                     {{- end }}
                                 {{- else -}}
                                     {{- if .Member -}}

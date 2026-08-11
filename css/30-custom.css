@@ -107,3 +107,45 @@ span.oi.help-icon[data-glyph="question-mark"] {
     background: #eee;
     cursor: pointer; /* Make it clear that this is actionable (click to show info */
 }
+/* Render a form and its submit button as inline text.
+ *
+ * State-changing actions must be POSTs rather than links: GET is a safe method
+ * to every CSRF defense, so a link that enables a user or edits group
+ * membership can be triggered by any page that can make the browser issue a
+ * request (an <img> tag is enough). These classes keep such actions looking
+ * like the links they replaced.
+ */
+form.inline {
+    display: inline;
+    margin: 0;
+}
+button.button-link {
+    display: inline;
+    height: auto;
+    margin: 0;
+    padding: 0;
+    border: none;
+    background: none;
+    /* Inherit rather than pick up the uppercase, letter-spaced button styling
+     * from Skeleton, so these read as running text. */
+    font: inherit;
+    letter-spacing: inherit;
+    text-transform: none;
+    color: #1eaedb;
+    text-decoration: underline;
+    cursor: pointer;
+}
+button.button-link:hover,
+button.button-link:focus {
+    color: #0fa0ce;
+    border: none;
+}
+/* Matches a.plain, for buttons whose label is a glyph rather than words. */
+button.button-link.plain {
+    text-decoration: none;
+}
+/* The nav bar is dark, so its links (and now its logout button) are light. */
+nav button.button-link {
+    color: #f7f7f7;
+    text-decoration: none;
+}
