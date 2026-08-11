@@ -5,7 +5,6 @@ import (
 	"net/http"
 
 	"github.com/ansel1/merry"
-	"github.com/gorilla/csrf"
 
 	"github.com/joshsziegler/zauth/pkg/password"
 	"github.com/joshsziegler/zauth/pkg/user"
@@ -40,7 +39,6 @@ func PasswordResetGetPost(c *Context, w http.ResponseWriter, r *http.Request) er
 	}
 
 	// Token is valid: continue
-	// Create page data here so we don't forget to create the CSRF token
 	requestedUser, err := c.GetUser(requestedUsername)
 	if err != nil {
 		return err
@@ -50,7 +48,6 @@ func PasswordResetGetPost(c *Context, w http.ResponseWriter, r *http.Request) er
 		Message:           c.NormalFlashMessage,
 		Error:             c.ErrorFlashMessage,
 		RequestedUser:     requestedUser,
-		CSRFField:         csrf.TemplateField(r),
 		PasswordMinLength: password.MinLength,
 		PasswordMaxLength: password.MaxLength,
 	}

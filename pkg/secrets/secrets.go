@@ -20,15 +20,14 @@ var (
 	store secrets
 )
 
-// secrets holds four key secrets for running the web server that should be
-// saved between runs (to prevent user sessions, cookies, and CSRF tokens from
-// being invalidated, and to provide password reset tokens).
+// secrets holds the key secrets for running the web server that should be
+// saved between runs (to prevent user sessions and cookies from being
+// invalidated, and to provide password reset tokens).
 //
 // These cannot be changed after init(), and are only provided via getters!
 type secrets struct {
 	AuthKey             []byte
 	EncryptionKey       []byte
-	CSRFKey             []byte
 	PasswordResetSecret []byte
 }
 
@@ -42,11 +41,6 @@ func AuthKey() []byte {
 // Gorilla docs suggest 32 bytes long for AES-256.
 func EncryptionKey() []byte {
 	return store.EncryptionKey
-}
-
-// CSRFKey is used for Cross Site Request Forgery (CSRF) protection
-func CSRFKey() []byte {
-	return store.CSRFKey
 }
 
 // PasswordResetSecret is used for securing password reset tokens.
@@ -79,10 +73,6 @@ func init() {
 	}
 	if len(store.EncryptionKey) < 1 {
 		store.EncryptionKey = securecookie.GenerateRandomKey(32)
-		writeFile = true
-	}
-	if len(store.CSRFKey) < 1 {
-		store.CSRFKey = securecookie.GenerateRandomKey(32)
 		writeFile = true
 	}
 	if len(store.PasswordResetSecret) < 1 {

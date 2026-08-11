@@ -70,11 +70,17 @@ docker compose down -v && docker compose up -d
 
 ## FAQ
 
-### I get "Forbidden - CSRF token invalid" when logging in!
+### I get "cross-origin request detected" (403) when submitting a form!
 
-Check your `config.yml` for `production`. If it is set to `true` and you're not
-running via SSL/TLS, the CSRF protection will not work. Change to `false` if
-you're simply developing locally, or make sure it's served behind SSL.
+CSRF protection compares the browser's `Sec-Fetch-Site` and `Origin` headers
+against the request's `Host`. A 403 means the browser considered the request
+cross-origin, which usually means you reached zauth through a different
+hostname or port than the page was served from. If zauth sits behind a reverse
+proxy, make sure the proxy forwards the original `Host` header rather than
+rewriting it to the backend address.
+
+This is no longer affected by the `production` setting in your config, and no
+longer depends on SSL/TLS.
 
 ### How can I query and test the LDAP server?
 

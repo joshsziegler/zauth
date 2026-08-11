@@ -1,11 +1,9 @@
 package httpserver
 
 import (
-	"html/template"
 	"net/http"
 
 	"github.com/ansel1/merry"
-	"github.com/gorilla/csrf"
 	"github.com/joshsziegler/zauth/pkg/password"
 	"github.com/joshsziegler/zauth/pkg/user"
 )
@@ -17,7 +15,6 @@ type userSetPasswordPageData struct {
 	RequestingUser user.User
 	// RequestedUser is the User they want to view on this page.
 	RequestedUser     user.User
-	CSRFField         template.HTML
 	PasswordMinLength int
 	PasswordMaxLength int
 }
@@ -40,7 +37,6 @@ func userSetPassword(c *Context, w http.ResponseWriter, r *http.Request) error {
 		Error:             c.ErrorFlashMessage,
 		RequestingUser:    *c.User,
 		RequestedUser:     requestedUser,
-		CSRFField:         csrf.TemplateField(r),
 		PasswordMinLength: password.MinLength,
 		PasswordMaxLength: password.MaxLength,
 	}
