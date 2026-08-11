@@ -35,7 +35,10 @@ tasks:
   css:
     desc: Bundle and minimize CSS
     cmds:
-      - minify -o public/style.css css
+      # Concatenated on stdin rather than passing the directory, which current
+      # minify versions only accept alongside --recursive and then treat the
+      # output path as a directory.
+      - cat css/*.css | minify --type css -o public/style.css
     sources:
       - css/*.css
     generates:

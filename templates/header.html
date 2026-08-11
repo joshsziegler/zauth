@@ -34,7 +34,9 @@
                         {{/* <a href="/group/new">New</a> */}}
                     {{ end }}
 
-                    <a href="/logout" class="u-pull-right">Logout</a>
+                    <form action="/logout" method="post" class="inline u-pull-right">
+                        <button type="submit" class="button-link">Logout</button>
+                    </form>
                 {{ else }}
                     &nbsp; {{/* Prevent this from shrinking due to no text. TODO: Show login link if this isn't the login page? */}}
                 {{ end }}

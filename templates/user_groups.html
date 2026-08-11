@@ -18,10 +18,16 @@
                         {{ range .GroupMembership }}
                             <li>
                                 {{- if .Member -}}
-                                    <a href="/users/{{ $RequestedUserUsername }}/groups/{{ .Name }}/remove" class="plain">&#128505</a> 
-                                {{- else -}} 
-                                    <a href="/users/{{ $RequestedUserUsername }}/groups/{{ .Name }}/add" class="plain">&#9744</a>
-                                {{- end }} 
+                                    <form action="/users/{{ $RequestedUserUsername }}/groups/{{ .Name }}/remove" method="post" class="inline">
+                                        <button type="submit" class="button-link plain" title="Remove from {{ .Name }}"
+                                            aria-label="Remove from {{ .Name }}">&#128505;</button>
+                                    </form>
+                                {{- else -}}
+                                    <form action="/users/{{ $RequestedUserUsername }}/groups/{{ .Name }}/add" method="post" class="inline">
+                                        <button type="submit" class="button-link plain" title="Add to {{ .Name }}"
+                                            aria-label="Add to {{ .Name }}">&#9744;</button>
+                                    </form>
+                                {{- end }}
                                 {{ .Name -}}
                             </li>
                         {{ else }}
